@@ -43,6 +43,12 @@ function dda_line(imageDataA, x1, y1, x2, y2, r, g, b) {
   }
 }
 
+function bar(imageDataA, x1, y1, x2, y2, r, g, b){
+  for (var i=0; i<13; i++){
+    dda_line(imageDataA, x1+i, y1, x2+i, y2, r, g, b);
+  }
+}
+
 function lingkaran(imageDataA, xc, yc, radius, r, g, b) {
     for (var x = xc - radius; x < xc + radius; x++) {
         var y = yc + Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
