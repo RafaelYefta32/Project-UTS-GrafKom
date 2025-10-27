@@ -43,25 +43,61 @@ function dda_line(imageDataA, x1, y1, x2, y2, r, g, b) {
   }
 }
 
-function bar(imageDataA, x1, y1, x2, y2, r, g, b){
-  for (var i=0; i<13; i++){
-    dda_line(imageDataA, x1+i, y1, x2+i, y2, r, g, b);
+function bar(imageDataA, x1, y1, x2, y2, r, g, b) {
+  for (var i = 0; i < 13; i++) {
+    dda_line(imageDataA, x1 + i, y1, x2 + i, y2, r, g, b);
   }
 }
 
+function draw_random_bar(canvas, ctx, n) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let i=0
+  const barWidth = 15;
+  const spacing = 0;
+  const totalWidth = n * (barWidth + spacing);
+  const startX = (canvas.width - totalWidth) / 2;
+  
+  function animate() {
+    if (i < n) {
+      let y = Math.floor(Math.random() * 50);
+      const x = startX + i * (barWidth + spacing);
+      bar(
+        imageDataA,
+        x,
+        canvas.height / 2 - y,
+        x,
+        canvas.height / 2,
+        173,
+        216,
+        230
+      );
+
+      
+      ctx.putImageData(imageDataA, 0, 0);
+      i++;
+      setTimeout(() => requestAnimationFrame(animate), 100);
+
+    }
+  }
+  imageDataA = ctx.getImageData(0, 0, canvas.width, canvas.height); 
+  animate()
+}
+
+
+
 function lingkaran(imageDataA, xc, yc, radius, r, g, b) {
-    for (var x = xc - radius; x < xc + radius; x++) {
-        var y = yc + Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
-        gambar_titik(imageDataA, x, y, r, g, b);
-        var y = yc - Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
-        gambar_titik(imageDataA, x, y, r, g, b);
-    }
-    for (var x = xc - radius; x < xc + radius; x++) {
-        var y = yc + Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
-        gambar_titik(imageDataA, y, x, r, g, b);
-        var y = yc - Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
-        gambar_titik(imageDataA, y, x, r, g, b);
-    }
+  for (var x = xc - radius; x < xc + radius; x++) {
+    var y = yc + Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
+    gambar_titik(imageDataA, x, y, r, g, b);
+    var y = yc - Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
+    gambar_titik(imageDataA, x, y, r, g, b);
+  }
+  for (var x = xc - radius; x < xc + radius; x++) {
+    var y = yc + Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
+    gambar_titik(imageDataA, y, x, r, g, b);
+    var y = yc - Math.sqrt(Math.pow(radius, 2) - Math.pow(x - xc, 2));
+    gambar_titik(imageDataA, y, x, r, g, b);
+  }
 }
 
 function lingkaran_polar(imageDataA, xc, yc, radius, r, g, b) {
@@ -108,47 +144,45 @@ function floodFillNaive(imageDataA, canvas, x, y, toFlood, color) {
 }
 
 function floodFillStack(imageDataA, canvas, x0, y0, toFlood, color) {
-    var stackTumpukan = [];
-    stackTumpukan.push({x:x0, y:y0});
+  var stackTumpukan = [];
+  stackTumpukan.push({ x: x0, y: y0 });
 
-    while(stackTumpukan.length>0){
-        var titik_sekarang = stackTumpukan.pop();
-        var index_sekarang = 4 * (titik_sekarang.x + titik_sekarang.y * canvas.width);
-        var r1 = imageDataA.data[index_sekarang];
-        var g1 = imageDataA.data[index_sekarang + 1];
-        var b1 = imageDataA.data[index_sekarang + 2];
+  while (stackTumpukan.length > 0) {
+    var titik_sekarang = stackTumpukan.pop();
+    var index_sekarang =
+      4 * (titik_sekarang.x + titik_sekarang.y * canvas.width);
+    var r1 = imageDataA.data[index_sekarang];
+    var g1 = imageDataA.data[index_sekarang + 1];
+    var b1 = imageDataA.data[index_sekarang + 2];
 
-        if (r1 == toFlood.r && g1 == toFlood.g && b1 == toFlood.b) {
-            imageDataA.data[index_sekarang] = color.r; //R
-            imageDataA.data[index_sekarang + 1] = color.g; //G
-            imageDataA.data[index_sekarang + 2] = color.b; //B
-            imageDataA.data[index_sekarang + 3] = 255; //A
-    
-            stackTumpukan.push({x:titik_sekarang.x+1, y:titik_sekarang.y});
-            stackTumpukan.push({x:titik_sekarang.x, y:titik_sekarang.y+1});
-            stackTumpukan.push({x:titik_sekarang.x-1, y:titik_sekarang.y});
-            stackTumpukan.push({x:titik_sekarang.x, y:titik_sekarang.y-1});
-        }
+    if (r1 == toFlood.r && g1 == toFlood.g && b1 == toFlood.b) {
+      imageDataA.data[index_sekarang] = color.r; //R
+      imageDataA.data[index_sekarang + 1] = color.g; //G
+      imageDataA.data[index_sekarang + 2] = color.b; //B
+      imageDataA.data[index_sekarang + 3] = 255; //A
+
+      stackTumpukan.push({ x: titik_sekarang.x + 1, y: titik_sekarang.y });
+      stackTumpukan.push({ x: titik_sekarang.x, y: titik_sekarang.y + 1 });
+      stackTumpukan.push({ x: titik_sekarang.x - 1, y: titik_sekarang.y });
+      stackTumpukan.push({ x: titik_sekarang.x, y: titik_sekarang.y - 1 });
     }
-    
+  }
 }
 
-function polygon(imageDataA, point_array, r,g,b){
-  for (var i=0; i<point_array.length - 1; i++){
+function polygon(imageDataA, point_array, r, g, b) {
+  for (var i = 0; i < point_array.length - 1; i++) {
     var x1 = point_array[i].x;
     var y1 = point_array[i].y;
-    var x2 = point_array[i+1].x;
-    var y2 = point_array[i+1].y;
+    var x2 = point_array[i + 1].x;
+    var y2 = point_array[i + 1].y;
 
-    dda_line(imageDataA,x1,y1,x2,y2,r,g,b);
+    dda_line(imageDataA, x1, y1, x2, y2, r, g, b);
   }
 
-  var xAkhir = point_array[point_array.length-1].x;
-  var yAkhir = point_array[point_array.length-1].y;
+  var xAkhir = point_array[point_array.length - 1].x;
+  var yAkhir = point_array[point_array.length - 1].y;
   var xAwal = point_array[0].x;
   var yAwal = point_array[0].y;
 
-  dda_line(imageDataA, xAkhir,yAkhir,xAwal,yAwal, r,g,b);
+  dda_line(imageDataA, xAkhir, yAkhir, xAwal, yAwal, r, g, b);
 }
-
-

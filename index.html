@@ -1,90 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
 
-    <style>
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
 
-      body {
-        display: flex;
-        align-items: flex-start;
-        border: 2px solid black;
-        gap: 20px;
-        padding: 20px;
-        height: 100vh;
-      }
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
 
-      #canva1 {
-        border: 3px blue solid;
-        width: 100%;
-        height: 100%;
-      }
+    body {
+      display: flex;
+      align-items: flex-start;
+      border: 2px solid black;
+      gap: 20px;
+      padding: 20px;
+      height: 100vh;
+    }
 
-      .left {
-        width: 70%;
-        height: 100%;
-        border: 2px solid black;
-      }
+    #canva1 {
+      border: 3px blue solid;
+      width: 100%;
+      height: 100%;
+    }
 
-      .right {
-        width: 30%;
-        height: 100%;
-        border: 2px solid black;
-        padding: 20px;
-      }
+    .left {
+      width: 70%;
+      height: 100%;
+      border: 2px solid black;
+    }
 
-      .inp {
-        height: 20px;
-      }
+    .right {
+      width: 30%;
+      height: 100%;
+      border: 2px solid black;
+      padding: 20px;
+    }
 
-      .right-col1 {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-    </style>
-  </head>
+    .inp {
+      height: 20px;
+    }
 
-  <body>
-    <div class="left">
-      <canvas id="canva1"></canvas>
-    </div>
-    <div class="right">
-      <div class="right-col1">
-        <div>N :&nbsp;<input type="text" class="inp" /></div>
-        <div>
-          <button>Sort</button>
-        </div>
+    .right-col1 {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="left">
+    <canvas id="canva1"></canvas>
+  </div>
+  <div class="right">
+    <div class="right-col1">
+      <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" />
+      </div>
+      <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" />
+        
+      </div>
+      <div>
+        <button>Sort</button>
       </div>
     </div>
+  </div>
 
-    <script src="script.js"></script>
-    <script src="transform.js"></script>
-    <script>
-      var cnv;
-      var canvas1 = document.getElementById("canva1");
-      var ctx = canvas1.getContext("2d");
+  <script src="script.js"></script>
+  <script src="transform.js"></script>
+  <script>
+    var cnv;
+    var canvas1 = document.getElementById("canva1");
+    var ctx = canvas1.getContext("2d");
 
-      cnv = document.querySelector("#canva1");
+    cnv = document.querySelector("#canva1");
 
-      var contex1;
-      contex1 = cnv.getContext("2d");
-      var imageDataA = contex1.getImageData(0, 0, cnv.width, cnv.height);
-      // persegi(imageDataA, 100,100,100,200, 173, 216, 230)
-      // var data = [19, 27, 31, 47, 28, 20, 24, 24, 21, 49];
-      for (var i = 0; i < 5; i++) {
-        var y = Math.floor(Math.random()*50);
-        bar(imageDataA, 100 + i * 15, 150 - y, 100 + i * 15, 300, 173, 216, 230);
-      }
+    var contex1;
+    contex1 = cnv.getContext("2d");
+    var imageDataA = contex1.getImageData(0, 0, cnv.width, cnv.height);
+    var inputN = document.getElementById("inputN")
 
-      contex1.putImageData(imageDataA, 0, 0);
-    </script>
-  </body>
+    draw_random_bar(canvas1, contex1, 5)
+
+    inputN.addEventListener("input", (e) => {
+      draw_random_bar(canvas1, contex1, e.target.value)
+    })
+
+
+
+    contex1.putImageData(imageDataA, 0, 0);
+  </script>
+</body>
+
 </html>
