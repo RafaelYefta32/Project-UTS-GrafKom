@@ -49,18 +49,18 @@ function bar(imageDataA, x1, y1, x2, y2, r, g, b) {
   }
 }
 
-function draw_random_bar(canvas, ctx, n) {
+function draw_bar(canvas, ctx, data) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  let i=0
-  const barWidth = 15;
-  const spacing = 0;
-  const totalWidth = n * (barWidth + spacing);
-  const startX = (canvas.width - totalWidth) / 2;
+  var i=0
+  var barWidth = 15;
+  var spacing = 0;
+  var totalWidth = data.length * (barWidth + spacing);
+  var startX = (canvas.width - totalWidth) / 2;
   
   function animate() {
-    if (i < n) {
-      let y = Math.floor(Math.random() * 50);
-      const x = startX + i * (barWidth + spacing);
+    if (i < data.length) {
+      var y = data[i];
+      var x = startX + i * (barWidth + spacing);
       bar(
         imageDataA,
         x,

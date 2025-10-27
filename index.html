@@ -83,11 +83,26 @@
     contex1 = cnv.getContext("2d");
     var imageDataA = contex1.getImageData(0, 0, cnv.width, cnv.height);
     var inputN = document.getElementById("inputN")
+    var inputA = document.getElementById("inputA")
 
-    draw_random_bar(canvas1, contex1, 5)
+    var data = []
+    for (let i = 0; i < 5; i++) {
+        data.push(Math.floor(Math.random() * 50));
+    }
+
+    draw_bar(canvas1, contex1, data)
 
     inputN.addEventListener("input", (e) => {
-      draw_random_bar(canvas1, contex1, e.target.value)
+      data = []
+      for (let i = 0; i < e.target.value; i++) {
+        data.push(Math.floor(Math.random() * 50));
+      }
+      draw_bar(canvas1, contex1, data)
+    })
+
+    inputA.addEventListener("input", (e) => {
+      data = e.target.value.split(",").map(Number)
+      draw_bar(canvas1, contex1, data)
     })
 
 
