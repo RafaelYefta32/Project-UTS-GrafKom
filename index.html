@@ -5,67 +5,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
-
-  <style>
-    * {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      display: flex;
-      align-items: flex-start;
-      border: 2px solid black;
-      gap: 20px;
-      padding: 20px;
-      height: 100vh;
-    }
-
-    #canva1 {
-      border: 3px blue solid;
-      width: 100%;
-      height: 100%;
-    }
-
-    .left {
-      width: 70%;
-      height: 100%;
-      border: 2px solid black;
-    }
-
-    .right {
-      width: 30%;
-      height: 100%;
-      border: 2px solid black;
-      padding: 20px;
-    }
-
-    .inp {
-      height: 20px;
-    }
-
-    .right-col1 {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <div class="left">
-    <canvas id="canva1"></canvas>
-  </div>
-  <div class="right">
-    <div class="right-col1">
-      <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" />
-      </div>
-      <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" />
-        
-      </div>
-      <div>
-        <button>Sort</button>
+  <div class="title">Simulasi Insertion Sort</div>
+
+  <div class="main-container">
+    <div class="left">
+      <canvas id="canva1"></canvas>
+    </div>
+    <div class="right">
+      <div class="right-col1">
+        <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" />
+        </div>
+        <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" />
+          
+        </div>
+        <div>
+          <button>Sort</button>
+        </div>
       </div>
     </div>
   </div>

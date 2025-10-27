@@ -51,29 +51,49 @@ function bar(imageDataA, x1, y1, x2, y2, r, g, b) {
 
 function draw_bar(canvas, ctx, data) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  var i=0
+  var i = 0
   var barWidth = 15;
   var spacing = 0;
   var totalWidth = data.length * (barWidth + spacing);
   var startX = (canvas.width - totalWidth) / 2;
+
+  var labelMargin = 14;
+  var topPadding = 6;
+  var maxUsable = Math.max(0, canvas.height / 2 - (labelMargin + topPadding));
+  var maxValue = 0;
+  for (var k = 0; k < data.length; k++) {
+    var v = Number(data[k]) || 0;
+    if (v > maxValue) {
+      maxValue = v;
+    }
+  }
+  var scale;
+  if (maxValue > 0) {
+    scale = maxUsable / maxValue;
+  } else {
+    scale = 1;
+  }
   
   function animate() {
     if (i < data.length) {
-      var y = data[i];
+      var rawValue = Number(data[i]) || 0;
+      var y = rawValue * scale;
       var x = startX + i * (barWidth + spacing);
-      bar(
-        imageDataA,
-        x,
-        canvas.height / 2 - y,
-        x,
-        canvas.height / 2,
-        173,
-        216,
-        230
-      );
-
+      bar(imageDataA, x, canvas.height / 2 - y, x, canvas.height / 2, 173, 216, 230);
       
       ctx.putImageData(imageDataA, 0, 0);
+
+      ctx.fillStyle = "black";
+      ctx.font = "10px";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      for (var j = 0; j <= i; j++) {
+        var value = data[j];
+        var labelX = startX + j * (barWidth + spacing) + barWidth / 2;
+        var labelY = canvas.height / 2 + 10;
+        ctx.fillText(String(value), labelX, labelY);
+      }
+      
       i++;
       setTimeout(() => requestAnimationFrame(animate), 100);
 
