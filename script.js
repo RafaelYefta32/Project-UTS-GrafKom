@@ -85,6 +85,7 @@ function bar_flood(imageDataA, canvas, x1, y1, x2, y2, r, g, b, fillColor) {
 
 function draw_bar(canvas, ctx, data) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let imageDataA = ctx.getImageData(0, 0, canvas.width, canvas.height);
   var i = 0;
   var barWidth = 15;
   var spacing = 0;
