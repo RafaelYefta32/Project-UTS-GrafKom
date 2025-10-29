@@ -1,70 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insertion Sort</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
+  <body>
+    <div class="title">Visualisasi Insertion Sort</div>
 
-<body>
-  <div class="title">Simulasi Insertion Sort</div>
-
-  <div class="main-container">
-    <div class="left">
-      <canvas id="canva1"></canvas>
-    </div>
-    <div class="right">
-      <div class="right-col1">
-        <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" />
-        </div>
-        <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" />
-
-        </div>
-        <div>
-          <button>Sort</button>
+    <div class="main-container">
+      <div class="left">
+        <canvas id="canva1"></canvas>
+      </div>
+      <div class="right">
+        <div class="right-col1">
+          <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" /></div>
+          <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" /></div>
+          <div>
+            <button>Sort</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
-  <script src="transform.js"></script>
-  <script>
-    var cnv;
-    var canvas1 = document.getElementById("canva1");
-    var ctx = canvas1.getContext("2d");
+    <script src="script.js"></script>
+    <script src="transform.js"></script>
+    <script src="transform_komposit.js"></script>
 
-    cnv = document.querySelector("#canva1");
-
-    var contex1;
-    contex1 = cnv.getContext("2d");
-    var inputN = document.getElementById("inputN")
-    var inputA = document.getElementById("inputA")
-
-    var data = []
-    for (let i = 0; i < 5; i++) {
-      data.push(Math.floor(Math.random() * 50 + 1));
-    }
-
-    draw_bar(canvas1, contex1, data)
-
-    inputN.addEventListener("input", (e) => {
-      data = []
-      for (let i = 0; i < e.target.value; i++) {
-        data.push(Math.floor(Math.random() * 50 + 1));
+    <script>
+      function setupCanvas(canvas) {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        return canvas.getContext("2d");
       }
-      draw_bar(canvas1, contex1, data)
-    })
 
-    inputA.addEventListener("input", (e) => {
-      data = e.target.value.split(",").map(Number)
-      draw_bar(canvas1, contex1, data)
-    })
+      const canvas = document.getElementById("canva1");
+      let ctx = setupCanvas(canvas);
 
-    contex1.putImageData(imageDataA, 0, 0);
-  </script>
-</body>
+      var cnv = canvas;
 
+      const inputN = document.getElementById("inputN");
+      const inputA = document.getElementById("inputA");
+
+      function drawBars(ctx, data) {
+        const width = ctx.canvas.getBoundingClientRect().width;
+        const height = ctx.canvas.getBoundingClientRect().height;
+        const color = { r: 109, g: 197, b: 255 };
+
+        ctx.clearRect(0, 0, width, height);
+
+        if (data.length === 0) {
+          return;
+        }
+
+        let imageDataA = ctx.getImageData(0, 0, width, height);
+
+        const barWidth = 30;
+        const spacing = 15;
+
+        const totalWidth = data.length * barWidth + (data.length - 1) * spacing;
+
+        const availableWidth = width * 0.9;
+
+        let scale = 1.0;
+        if (totalWidth > availableWidth) {
+          scale = availableWidth / totalWidth;
+        }
+
+        const s = { x: scale, y: 1.0 };
+
+        const offsetY = height * 0.8;
+        const titik_putar = { x: width / 2, y: offsetY };
+
+        const startX = (width - totalWidth) / 2;
+
+        const maxValue = Math.max(...data) > 0 ? Math.max(...data) : 1;
+        const scaleHeight = (height * 0.4) / maxValue;
+
+        let barNumber = [];
+
+        for (let i = 0; i < data.length; i++) {
+          const value = data[i];
+          const barHeight = value * scaleHeight;
+
+          const x1_base = Math.floor(startX + i * (barWidth + spacing));
+          const y1_base = Math.floor(offsetY - barHeight);
+          const x2_base = Math.floor(x1_base + barWidth);
+          const y2_base = Math.floor(offsetY);
+
+          const p1_transform = skalaFP({ x: x1_base, y: y1_base }, titik_putar, s);
+          const p2_transform = skalaFP({ x: x2_base, y: y2_base }, titik_putar, s);
+
+          const x1 = Math.floor(p1_transform.x);
+          const y1 = Math.floor(p1_transform.y);
+          const x2 = Math.floor(p2_transform.x);
+          const y2 = Math.floor(p2_transform.y);
+
+          for (let x = x1 + 1; x < x2; x++) {
+            dda_line(imageDataA, x, y2 - 1, x, y1 + 1, color.r, color.g, color.b);
+          }
+
+          dda_line(imageDataA, x1, y1, x2, y1, 0, 0, 0);
+          dda_line(imageDataA, x2, y1, x2, y2, 0, 0, 0);
+          dda_line(imageDataA, x2, y2, x1, y2, 0, 0, 0);
+          dda_line(imageDataA, x1, y2, x1, y1, 0, 0, 0);
+
+          const text_base = { x: x1_base + barWidth / 2, y: offsetY + 15 };
+          const text_transform = skalaFP(text_base, titik_putar, s);
+
+          barNumber.push({
+            text: value,
+            x: text_transform.x,
+            y: text_transform.y,
+          });
+        }
+
+        ctx.putImageData(imageDataA, 0, 0);
+
+        ctx.fillStyle = "#000";
+        ctx.font = "14px Arial";
+        ctx.textAlign = "center";
+        barNumber.forEach((numberInfo) => {
+          ctx.fillText(numberInfo.text, numberInfo.x, numberInfo.y);
+        });
+      }
+
+      let data = [];
+      for (let i = 0; i < 5; i++) {
+        data.push(Math.floor(Math.random() * 50));
+      }
+      drawBars(ctx, data);
+
+      inputN.addEventListener("input", (e) => {
+        const n = Number(e.target.value);
+        if (n > 0) {
+          data = Array.from({ length: n }, () => Math.floor(Math.random() * 50));
+        } else {
+          data = [];
+        }
+        drawBars(ctx, data);
+      });
+
+      inputA.addEventListener("input", (e) => {
+        data = e.target.value
+          .split(",")
+          .map((n) => parseFloat(n))
+          .filter((v) => !isNaN(v));
+        drawBars(ctx, data);
+      });
+    </script>
+  </body>
 </html>

@@ -1,9 +1,6 @@
 function gambar_titik(imageDataA, x, y, r, g, b) {
-  var xi = Math.round(x);
-  var yi = Math.round(y);
-
-  if (xi < 0 || yi < 0 || xi >= cnv.width || yi >= cnv.height) return;
-  var index = 4 * (xi + yi * cnv.width);
+  var index;
+  index = 4 * (Math.ceil(x) + Math.ceil(y) * cnv.width);
   imageDataA.data[index] = r; //R
   imageDataA.data[index + 1] = g; //G
   imageDataA.data[index + 2] = b; //B
@@ -44,106 +41,6 @@ function dda_line(imageDataA, x1, y1, x2, y2, r, g, b) {
       }
     }
   }
-}
-
-function bar(imageDataA, x1, y1, x2, y2, r, g, b) {
-  for (var i = 0; i < 13; i++) {
-    dda_line(imageDataA, x1 + i, y1, x2 + i, y2, r, g, b);
-  }
-}
-
-function bar_flood(imageDataA, canvas, x1, y1, x2, y2, r, g, b, fillColor) {
-  dda_line(imageDataA, x1, y1, x1, y2, r, g, b);
-  dda_line(imageDataA, x1, y2, x2, y2, r, g, b);
-  dda_line(imageDataA, x2, y2, x2, y1, r, g, b);
-  dda_line(imageDataA, x2, y1, x1, y1, r, g, b);
-
-  var fillX = Math.floor((x1 + x2) / 2);
-  var fillY = Math.floor((y1 + y2) / 2);
-
-  if (fillX < 0 || fillY < 0 || fillX >= canvas.width || fillY >= canvas.height) return;
-
-  var idx = 4 * (fillX + fillY * canvas.width);
-  var toFlood = {
-    r: imageDataA.data[idx],
-    g: imageDataA.data[idx + 1],
-    b: imageDataA.data[idx + 2],
-    a: imageDataA.data[idx + 3] !== undefined ? imageDataA.data[idx + 3] : 255
-  };
-
-  if (
-    toFlood.r === fillColor.r &&
-    toFlood.g === fillColor.g &&
-    toFlood.b === fillColor.b &&
-    toFlood.a === (fillColor.a !== undefined ? fillColor.a : 255)
-  ) {
-    return;
-  }
-
-  floodFillStack(imageDataA, canvas, fillX, fillY, toFlood, fillColor);
-}
-
-function draw_bar(canvas, ctx, data) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  var i = 0;
-  var barWidth = 15;
-  var spacing = 0;
-  var totalWidth = data.length * (barWidth + spacing);
-  var startX = (canvas.width - totalWidth) / 2;
-
-  var labelMargin = 14;
-  var topPadding = 6;
-  var maxUsable = Math.max(0, canvas.height / 2 - (labelMargin + topPadding));
-  var maxValue = 0;
-  for (var k = 0; k < data.length; k++) {
-    var v = Number(data[k]) || 0;
-    if (v > maxValue) {
-      maxValue = v;
-    }
-  }
-  var scale;
-  if (maxValue > 0) {
-    scale = maxUsable / maxValue;
-  } else {
-    scale = 1;
-  }
-
-  function animate() {
-    if (i < data.length) {
-      var rawValue = Number(data[i]) || 0;
-      var y = rawValue * scale;
-      var x = startX + i * (barWidth + spacing);
-
-      bar_flood(
-        imageDataA,
-        canvas,
-        Math.floor(x),
-        Math.floor(canvas.height / 2 - y),
-        Math.floor(x + barWidth),
-        Math.floor(canvas.height / 2),
-        0, 0, 0,
-        { r: 173, g: 216, b: 230 }
-      );
-
-      ctx.putImageData(imageDataA, 0, 0);
-
-      ctx.fillStyle = "black";
-      ctx.font = "10px Arial";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "top";
-      for (var j = 0; j <= i; j++) {
-        var value = data[j];
-        var labelX = startX + j * (barWidth + spacing) + barWidth / 2;
-        var labelY = canvas.height / 2 + 10;
-        ctx.fillText(String(value), labelX, labelY);
-      }
-
-      i++;
-      setTimeout(() => requestAnimationFrame(animate), 100);
-    }
-  }
-  imageDataA = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  animate();
 }
 
 function lingkaran(imageDataA, xc, yc, radius, r, g, b) {
@@ -226,12 +123,7 @@ function floodFillStack(imageDataA, canvas, x0, y0, toFlood, color) {
     var b1 = imageDataA.data[index_sekarang + 2];
     var a1 = imageDataA.data[index_sekarang + 3];
 
-    if (
-      r1 === toFlood.r &&
-      g1 === toFlood.g &&
-      b1 === toFlood.b &&
-      (a1 === undefined ? 255 : a1) === (toFlood.a !== undefined ? toFlood.a : 255)
-    ) {
+    if (r1 === toFlood.r && g1 === toFlood.g && b1 === toFlood.b && (a1 === undefined ? 255 : a1) === (toFlood.a !== undefined ? toFlood.a : 255)) {
       imageDataA.data[index_sekarang] = color.r; //R
       imageDataA.data[index_sekarang + 1] = color.g; //G
       imageDataA.data[index_sekarang + 2] = color.b; //B
