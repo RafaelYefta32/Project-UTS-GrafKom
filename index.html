@@ -20,7 +20,7 @@
         <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" />
         </div>
         <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" />
-          
+
         </div>
         <div>
           <button>Sort</button>
@@ -40,13 +40,12 @@
 
     var contex1;
     contex1 = cnv.getContext("2d");
-    var imageDataA = contex1.getImageData(0, 0, cnv.width, cnv.height);
     var inputN = document.getElementById("inputN")
     var inputA = document.getElementById("inputA")
 
     var data = []
     for (let i = 0; i < 5; i++) {
-        data.push(Math.floor(Math.random() * 50));
+      data.push(Math.floor(Math.random() * 50 + 1));
     }
 
     draw_bar(canvas1, contex1, data)
@@ -54,7 +53,7 @@
     inputN.addEventListener("input", (e) => {
       data = []
       for (let i = 0; i < e.target.value; i++) {
-        data.push(Math.floor(Math.random() * 50));
+        data.push(Math.floor(Math.random() * 50 + 1));
       }
       draw_bar(canvas1, contex1, data)
     })
@@ -63,8 +62,6 @@
       data = e.target.value.split(",").map(Number)
       draw_bar(canvas1, contex1, data)
     })
-
-
 
     contex1.putImageData(imageDataA, 0, 0);
   </script>
