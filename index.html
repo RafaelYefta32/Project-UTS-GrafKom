@@ -40,13 +40,13 @@
       >
         <div class="right-col1 flex flex-col gap-5">
           <div class="text-xl font-semibold text-blue-700 mb-2">
-            Pengaturan Nilai
+            Pengaturan
           </div>
 
           <!-- Input N -->
           <div class="flex flex-col gap-2">
             <label for="inputN" class="text-sm font-medium text-gray-700"
-              >Jumlah Elemen (N):</label
+              >Jumlah Elemen Random (N):</label
             >
             <input
               type="number"
@@ -55,12 +55,26 @@
               value="5"
               class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md"
             />
+            <div class="flex gap-2 mt-2">
+              <button
+                id="manyDuplicateBtn"
+                class="flex-1 px-2 py-1 bg-sky-400 text-white text-sm rounded-md shadow-sm"
+              >
+                Banyak Duplikat
+              </button>
+              <button
+                id="uniqueBtn"
+                class="flex-1 px-2 py-1 bg-sky-400 text-white text-sm rounded-md shadow-sm"
+              >
+                Unik
+              </button>
+            </div>
           </div>
 
           <!-- Input A -->
           <div class="flex flex-col gap-2">
             <label for="inputA" class="text-sm font-medium text-gray-700"
-              >Masukkan Nilai Manual (A):</label
+              >Nilai Manual (A):</label
             >
             <input
               type="text"
@@ -73,34 +87,33 @@
             </p>
           </div>
 
-   <div class="flex flex-col gap-3 mt-3">
-  <!-- Dropdown Arah -->
-  <select
-    id="sortDirection"
-    class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none shadow-sm hover:shadow-md transition-all"
-  >
-    <option value="asc">Ascending</option>
-    <option value="desc">Descending</option>
-  </select>
+          <div class="flex flex-col gap-3 mt-3">
+            <!-- Dropdown Arah -->
+            <select
+              id="sortDirection"
+              class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none shadow-sm hover:shadow-md transition-all"
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
 
-  <!-- Tombol Sort & Sorted -->
-  <div class="flex gap-3">
-    <button
-      id="sortedBtn"
-      class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
-    >
-      Sorted
-    </button>
+            <!-- Tombol Sort & Sorted -->
+            <div class="flex gap-3">
+              <button
+                id="sortedBtn"
+                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
+              >
+                Sorted
+              </button>
 
-    <button
-      id="sortBtn"
-      class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
-    >
-      Sort
-    </button>
-  </div>
-</div>
-
+              <button
+                id="sortBtn"
+                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
+              >
+                Sort
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -125,6 +138,9 @@
       let ctx = setupCanvas(canvas);
 
       var cnv = canvas;
+
+      const btnManyDuplicate = document.getElementById("manyDuplicateBtn");
+      const btnUnique = document.getElementById("uniqueBtn");
 
       const inputN = document.getElementById("inputN");
       const inputA = document.getElementById("inputA");
@@ -252,6 +268,27 @@
           .split(",")
           .map((n) => parseFloat(n))
           .filter((v) => !isNaN(v));
+        drawBars(ctx, data);
+      });
+
+      btnManyDuplicate.addEventListener("click", () => {
+        console.log("tes");
+        const n = Number(inputN.value);
+        const range = Math.max(Math.floor(n / 2), 1);
+        data = Array.from({ length: n }, () =>
+          Math.floor(Math.random() * range)
+        );
+        drawBars(ctx, data);
+      });
+
+      btnUnique.addEventListener("click", () => {
+        const n = Number(inputN.value);
+        const maxValue = n * 2;
+        let uniqueSet = new Set();
+        while (uniqueSet.size < n) {
+          uniqueSet.add(Math.floor(Math.random() * maxValue) + 1);
+        }
+        data = Array.from(uniqueSet);
         drawBars(ctx, data);
       });
     </script>
