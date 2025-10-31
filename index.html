@@ -3,27 +3,111 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Insertion Sort</title>
+    <title>Visualisasi Insertion Sort</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tetap gunakan style.css -->
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
-  <body>
-    <div class="title">Visualisasi Insertion Sort</div>
+  <body
+    class="bg-gradient-to-br from-white via-sky-50 to-blue-100 text-gray-800 flex flex-col gap-6 p-6 h-screen font-[Plus_Jakarta_Sans]"
+  >
+    <!-- Judul -->
+    <div
+      class="title text-3xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 drop-shadow-sm"
+    >
+      Visualisasi Insertion Sort
+    </div>
 
-    <div class="main-container">
-      <div class="left">
-        <canvas id="canva1"></canvas>
+    <!-- Kontainer utama -->
+    <div class="main-container flex flex-1 gap-6">
+      <!-- Kiri -->
+      <div
+        class="left flex-1 rounded-2xl bg-white shadow-xl border border-blue-200 flex items-center justify-center"
+      >
+        <canvas id="canva1" class="rounded-lg w-full h-full"></canvas>
       </div>
-      <div class="right">
-        <div class="right-col1">
-          <div>N (Nilai Random) :&nbsp;<input type="number" class="inp" id="inputN" min="1" value="5" /></div>
-          <div>A (Nilai Manual) :&nbsp;<input type="text" class="inp" id="inputA" value="10,20,30,40,50" /></div>
-          <div>
-            <button>Sort</button>
+
+      <!-- Kanan -->
+      <div
+        class="right w-[25%] rounded-2xl bg-white shadow-xl border border-blue-200 p-6 flex flex-col justify-between"
+      >
+        <div class="right-col1 flex flex-col gap-5">
+          <div class="text-xl font-semibold text-blue-700 mb-2">
+            Pengaturan Nilai
           </div>
+
+          <!-- Input N -->
+          <div class="flex flex-col gap-2">
+            <label for="inputN" class="text-sm font-medium text-gray-700"
+              >Jumlah Elemen (N):</label
+            >
+            <input
+              type="number"
+              id="inputN"
+              min="1"
+              value="5"
+              class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md"
+            />
+          </div>
+
+          <!-- Input A -->
+          <div class="flex flex-col gap-2">
+            <label for="inputA" class="text-sm font-medium text-gray-700"
+              >Masukkan Nilai Manual (A):</label
+            >
+            <input
+              type="text"
+              id="inputA"
+              value="10,20,30,40,50"
+              class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md"
+            />
+            <p class="text-xs text-gray-500 italic">
+              Gunakan koma untuk memisahkan nilai (contoh: 10,20,30)
+            </p>
+          </div>
+
+   <div class="flex flex-col gap-3 mt-3">
+  <!-- Dropdown Arah -->
+  <select
+    id="sortDirection"
+    class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none shadow-sm hover:shadow-md transition-all"
+  >
+    <option value="asc">Ascending</option>
+    <option value="desc">Descending</option>
+  </select>
+
+  <!-- Tombol Sort & Sorted -->
+  <div class="flex gap-3">
+    <button
+      id="sortedBtn"
+      class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
+    >
+      Sorted
+    </button>
+
+    <button
+      id="sortBtn"
+      class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
+    >
+      Sort
+    </button>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
+
+    <script src="script.js"></script>
+    <script src="transform.js"></script>
+    <script src="transform_komposit.js"></script>
 
     <script src="script.js"></script>
     <script src="transform.js"></script>
@@ -91,8 +175,16 @@
           const x2_base = Math.floor(x1_base + barWidth);
           const y2_base = Math.floor(offsetY);
 
-          const p1_transform = skalaFP({ x: x1_base, y: y1_base }, titik_putar, s);
-          const p2_transform = skalaFP({ x: x2_base, y: y2_base }, titik_putar, s);
+          const p1_transform = skalaFP(
+            { x: x1_base, y: y1_base },
+            titik_putar,
+            s
+          );
+          const p2_transform = skalaFP(
+            { x: x2_base, y: y2_base },
+            titik_putar,
+            s
+          );
 
           const x1 = Math.floor(p1_transform.x);
           const y1 = Math.floor(p1_transform.y);
@@ -100,7 +192,16 @@
           const y2 = Math.floor(p2_transform.y);
 
           for (let x = x1 + 1; x < x2; x++) {
-            dda_line(imageDataA, x, y2 - 1, x, y1 + 1, color.r, color.g, color.b);
+            dda_line(
+              imageDataA,
+              x,
+              y2 - 1,
+              x,
+              y1 + 1,
+              color.r,
+              color.g,
+              color.b
+            );
           }
 
           dda_line(imageDataA, x1, y1, x2, y1, 0, 0, 0);
@@ -137,7 +238,9 @@
       inputN.addEventListener("input", (e) => {
         const n = Number(e.target.value);
         if (n > 0) {
-          data = Array.from({ length: n }, () => Math.floor(Math.random() * 50));
+          data = Array.from({ length: n }, () =>
+            Math.floor(Math.random() * 50)
+          );
         } else {
           data = [];
         }
