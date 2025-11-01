@@ -255,44 +255,56 @@
       }
       drawBars(ctx, data);
 
-      inputN.addEventListener("input", (e) => {
-        const n = Number(e.target.value);
+      inputN.addEventListener("input", function (e) {
+        var n = parseInt(e.target.value);
         if (n > 0) {
-          data = Array.from({ length: n }, () =>
-            Math.floor(Math.random() * 50)
-          );
+          data = [];
+          for (var i = 0; i < n; i++) {
+            data.push(Math.floor(Math.random() * 50));
+          }
         } else {
           data = [];
         }
         drawBars(ctx, data);
       });
 
-      inputA.addEventListener("input", (e) => {
-        data = e.target.value
-          .split(",")
-          .map((n) => parseFloat(n))
-          .filter((v) => !isNaN(v));
-        drawBars(ctx, data);
-      });
-
-      btnManyDuplicate.addEventListener("click", () => {
-        console.log("tes");
-        const n = Number(inputN.value);
-        const range = Math.max(Math.floor(n / 2), 1);
-        data = Array.from({ length: n }, () =>
-          Math.floor(Math.random() * range)
-        );
-        drawBars(ctx, data);
-      });
-
-      btnUnique.addEventListener("click", () => {
-        const n = Number(inputN.value);
-        const maxValue = n * 2;
-        let uniqueSet = new Set();
-        while (uniqueSet.size < n) {
-          uniqueSet.add(Math.floor(Math.random() * maxValue) + 1);
+      inputA.addEventListener("input", function (e) {
+        var teks = e.target.value;
+        var nilai = teks.split(",");
+        data = [];
+        for (var i = 0; i < nilai.length; i++) {
+          var angka = parseFloat(nilai[i]);
+          if (!isNaN(angka)) {
+            data.push(angka);
+          }
         }
-        data = Array.from(uniqueSet);
+        drawBars(ctx, data);
+      });
+
+      btnManyDuplicate.addEventListener("click", function () {
+        var n = parseInt(inputN.value);
+        var range = Math.floor(n / 2);
+        if (range < 1) {
+          range = 1;
+        }
+        data = [];
+        for (var i = 0; i < n; i++) {
+          data.push(Math.floor(Math.random() * range));
+        }
+        drawBars(ctx, data);
+      });
+
+      btnUnique.addEventListener("click", function () {
+        var n = parseInt(inputN.value);
+        var maxValue = n * 2;
+        var unik = [];
+        while (unik.length < n) {
+          var acak = Math.floor(Math.random() * maxValue) + 1;
+          if (unik.indexOf(acak) === -1) {
+            unik.push(acak);
+          }
+        }
+        data = unik;
         drawBars(ctx, data);
       });
 
@@ -331,11 +343,16 @@
 
 
       function applySortFromDropdown() {
-        if (!Array.isArray(data) || data.length === 0) {
+        if (!data || data.length === 0) {
           return;
         }
-        const dir = sortDirection.value;
-        const arr = data.slice();
+
+        var dir = sortDirection.value;
+        var arr = [];
+        for (var i = 0; i < data.length; i++) {
+          arr.push(data[i]);
+        }
+
         insertionSort(arr, dir);
         data = arr;
         drawBars(ctx, data);
