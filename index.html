@@ -145,6 +145,10 @@
       const inputN = document.getElementById("inputN");
       const inputA = document.getElementById("inputA");
 
+      const sortDirection = document.getElementById("sortDirection");
+      // const sortBtn = document.getElementById("sortBtn"); 
+      const sortedBtn = document.getElementById("sortedBtn");
+
       function drawBars(ctx, data) {
         const width = ctx.canvas.getBoundingClientRect().width;
         const height = ctx.canvas.getBoundingClientRect().height;
@@ -291,6 +295,53 @@
         data = Array.from(uniqueSet);
         drawBars(ctx, data);
       });
+
+      function insertionSort(A, direction) {
+        var N = A.length;
+        for (var p = 1; p < N; p++) {
+          var tem = A[p];
+          var i = p - 1;
+
+          if (direction === "asc") {
+            while (i > 0 && tem < A[i]) {
+              A[i + 1] = A[i];
+              i = i - 1;
+            }
+            if (tem >= A[i]) {
+              A[i + 1] = tem;
+            } else {
+              A[i + 1] = A[i];
+              A[i] = tem;
+            }
+          } else {
+            while (i > 0 && tem > A[i]) {
+              A[i + 1] = A[i];
+              i = i - 1;
+            }
+            if (tem <= A[i]) {
+              A[i + 1] = tem;
+            } else {
+              A[i + 1] = A[i];
+              A[i] = tem;
+            }
+          }
+        }
+        return A;
+      }
+
+
+      function applySortFromDropdown() {
+        if (!Array.isArray(data) || data.length === 0) {
+          return;
+        }
+        const dir = sortDirection.value;
+        const arr = data.slice();
+        insertionSort(arr, dir);
+        data = arr;
+        drawBars(ctx, data);
+      }
+
+      sortedBtn.addEventListener("click", applySortFromDropdown);
     </script>
   </body>
 </html>
