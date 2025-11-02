@@ -137,6 +137,13 @@ function floodFillStack(imageDataA, canvas, x0, y0, toFlood, color) {
   }
 }
 
+function bar(imageDataA, p2, r, g, b) {
+  dda_line(imageDataA, p2.x1, p2.y1, p2.x2, p2.y1, 0, 0, 0);
+  dda_line(imageDataA, p2.x2, p2.y1, p2.x2, p2.y2, 0, 0, 0);
+  dda_line(imageDataA, p2.x2, p2.y2, p2.x1, p2.y2, 0, 0, 0);
+  dda_line(imageDataA, p2.x1, p2.y2, p2.x1, p2.y1, 0, 0, 0);
+}
+
 function polygon(imageDataA, point_array, r, g, b) {
   for (var i = 0; i < point_array.length - 1; i++) {
     var x1 = point_array[i].x;

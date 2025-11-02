@@ -9,118 +9,60 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tetap gunakan style.css -->
     <link rel="stylesheet" href="style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   </head>
 
-  <body
-    class="bg-gradient-to-br from-white via-sky-50 to-blue-100 text-gray-800 flex flex-col gap-6 p-6 h-screen font-[Plus_Jakarta_Sans]"
-  >
+  <body class="bg-gradient-to-br from-white via-sky-50 to-blue-100 text-gray-800 flex flex-col gap-6 p-6 h-screen font-[Plus_Jakarta_Sans]">
     <!-- Judul -->
-    <div
-      class="title text-3xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 drop-shadow-sm"
-    >
-      Visualisasi Insertion Sort
-    </div>
+    <div class="title text-3xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 drop-shadow-sm">Visualisasi Insertion Sort</div>
 
     <!-- Kontainer utama -->
     <div class="main-container flex flex-1 gap-6">
       <!-- Kiri -->
-      <div
-        class="left flex-1 rounded-2xl bg-white shadow-xl border border-blue-200 flex items-center justify-center"
-      >
+      <div class="left flex-1 rounded-2xl bg-white shadow-xl border border-blue-200 flex items-center justify-center">
         <canvas id="canva1" class="rounded-lg w-full h-full"></canvas>
       </div>
 
       <!-- Kanan -->
-      <div
-        class="right w-[25%] rounded-2xl bg-white shadow-xl border border-blue-200 p-6 flex flex-col justify-between"
-      >
+      <div class="right w-[25%] rounded-2xl bg-white shadow-xl border border-blue-200 p-6 flex flex-col justify-between">
         <div class="right-col1 flex flex-col gap-5">
-          <div class="text-xl font-semibold text-blue-700 mb-2">
-            Pengaturan
-          </div>
+          <div class="text-xl font-semibold text-blue-700 mb-2">Pengaturan</div>
 
           <!-- Input N -->
           <div class="flex flex-col gap-2">
-            <label for="inputN" class="text-sm font-medium text-gray-700"
-              >Jumlah Elemen Random (N):</label
-            >
-            <input
-              type="number"
-              id="inputN"
-              min="1"
-              value="5"
-              class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md"
-            />
+            <label for="inputN" class="text-sm font-medium text-gray-700">Jumlah Elemen Random (N):</label>
+            <input type="number" id="inputN" min="1" value="5" max="50" class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md" />
+            <p class="text-xs text-gray-500 italic">Batas nilai N : 50</p>
             <div class="flex gap-2 mt-2">
-              <button
-                id="manyDuplicateBtn"
-                class="flex-1 px-2 py-1 bg-sky-400 text-white text-sm rounded-md shadow-sm"
-              >
-                Banyak Duplikat
-              </button>
-              <button
-                id="uniqueBtn"
-                class="flex-1 px-2 py-1 bg-sky-400 text-white text-sm rounded-md shadow-sm"
-              >
-                Unik
-              </button>
+              <button id="manyDuplicateBtn" class="flex-1 px-2 py-1 bg-sky-400 text-white text-sm rounded-md shadow-sm">Banyak Duplikat</button>
+              <button id="uniqueBtn" class="flex-1 px-2 py-1 bg-sky-400 text-white text-sm rounded-md shadow-sm">Unik</button>
             </div>
           </div>
 
           <!-- Input A -->
           <div class="flex flex-col gap-2">
-            <label for="inputA" class="text-sm font-medium text-gray-700"
-              >Nilai Manual (A):</label
-            >
-            <input
-              type="text"
-              id="inputA"
-              value="10,20,30,40,50"
-              class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md"
-            />
-            <p class="text-xs text-gray-500 italic">
-              Gunakan koma untuk memisahkan nilai (contoh: 10,20,30)
-            </p>
+            <label for="inputA" class="text-sm font-medium text-gray-700">Nilai Manual (A):</label>
+            <input type="text" id="inputA" value="10,20,30,40,50" class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md" />
+            <p class="text-xs text-gray-500 italic">Gunakan koma untuk memisahkan nilai (contoh: 10,20,30)</p>
           </div>
 
           <div class="flex flex-col gap-3 mt-3">
             <!-- Dropdown Arah -->
-            <select
-              id="sortDirection"
-              class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none shadow-sm hover:shadow-md transition-all"
-            >
+            <select id="sortDirection" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none shadow-sm hover:shadow-md transition-all">
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </select>
 
             <!-- Tombol Sort & Sorted -->
             <div class="flex gap-3">
-              <button
-                id="sortedBtn"
-                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
-              >
-                Sorted
-              </button>
+              <button id="sortedBtn" class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50">Sorted</button>
 
-              <button
-                id="sortBtn"
-                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50"
-              >
-                Sort
-              </button>
+              <button id="sortBtn" class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50">Sort</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <script src="script.js"></script>
-    <script src="transform.js"></script>
-    <script src="transform_komposit.js"></script>
 
     <script src="script.js"></script>
     <script src="transform.js"></script>
@@ -137,6 +79,13 @@
       const canvas = document.getElementById("canva1");
       let ctx = setupCanvas(canvas);
 
+      const colorData = {
+        blue: { r: 109, g: 197, b: 255 },
+        orange: { r: 255, g: 165, b: 0 },
+        merah: { r: 255, g: 102, b: 102 },
+        hijau: { r: 144, g: 238, b: 144 },
+      };
+
       var cnv = canvas;
 
       const btnManyDuplicate = document.getElementById("manyDuplicateBtn");
@@ -146,45 +95,43 @@
       const inputA = document.getElementById("inputA");
 
       const sortDirection = document.getElementById("sortDirection");
-      // const sortBtn = document.getElementById("sortBtn"); 
+      const sortBtn = document.getElementById("sortBtn");
       const sortedBtn = document.getElementById("sortedBtn");
 
-      function drawBars(ctx, data) {
-        const width = ctx.canvas.getBoundingClientRect().width;
-        const height = ctx.canvas.getBoundingClientRect().height;
-        const color = { r: 109, g: 197, b: 255 };
+      const width = ctx.canvas.getBoundingClientRect().width;
+      const height = ctx.canvas.getBoundingClientRect().height;
 
+      function drawBars(ctx, data) {
+        const color = { r: 109, g: 197, b: 255 };
         ctx.clearRect(0, 0, width, height);
 
         if (data.length === 0) {
-          return;
+          return { dataBar: [], centerBar: [] };
         }
-
         let imageDataA = ctx.getImageData(0, 0, width, height);
 
         const barWidth = 30;
         const spacing = 15;
 
         const totalWidth = data.length * barWidth + (data.length - 1) * spacing;
-
         const availableWidth = width * 0.9;
 
         let scale = 1.0;
         if (totalWidth > availableWidth) {
           scale = availableWidth / totalWidth;
         }
-
         const s = { x: scale, y: 1.0 };
 
-        const offsetY = height * 0.8;
+        const offsetY = height * 0.93;
         const titik_putar = { x: width / 2, y: offsetY };
 
         const startX = (width - totalWidth) / 2;
-
         const maxValue = Math.max(...data) > 0 ? Math.max(...data) : 1;
         const scaleHeight = (height * 0.4) / maxValue;
 
         let barNumber = [];
+        var centerBar = [];
+        var dataBar = [];
 
         for (let i = 0; i < data.length; i++) {
           const value = data[i];
@@ -195,68 +142,58 @@
           const x2_base = Math.floor(x1_base + barWidth);
           const y2_base = Math.floor(offsetY);
 
-          const p1_transform = skalaFP(
-            { x: x1_base, y: y1_base },
-            titik_putar,
-            s
-          );
-          const p2_transform = skalaFP(
-            { x: x2_base, y: y2_base },
-            titik_putar,
-            s
-          );
+          const p1_transform = skalaFP({ x: x1_base, y: y1_base }, titik_putar, s);
+          const p2_transform = skalaFP({ x: x2_base, y: y2_base }, titik_putar, s);
 
           const x1 = Math.floor(p1_transform.x);
           const y1 = Math.floor(p1_transform.y);
           const x2 = Math.floor(p2_transform.x);
           const y2 = Math.floor(p2_transform.y);
+          dataBar.push({ x1: x1, y1: y1, x2: x2, y2: y2, color: { r: 109, g: 197, b: 255 } });
 
-          for (let x = x1 + 1; x < x2; x++) {
-            dda_line(
-              imageDataA,
-              x,
-              y2 - 1,
-              x,
-              y1 + 1,
-              color.r,
-              color.g,
-              color.b
-            );
+          bar(imageDataA, { x1: x1, y1: y1, x2: x2, y2: y2 }, 0, 0, 0);
+
+          const fillX = Math.floor((x1 + x2) / 2);
+          const fillY = Math.floor((y1 + y2) / 2);
+          centerBar.push({ x: fillX, y: fillY });
+
+          const toFlood = { r: 0, g: 0, b: 0, a: 0 };
+          if (fillX > x1 && fillX < x2 && fillY > y1 && fillY < y2) {
+            floodFillStack(imageDataA, ctx.canvas, fillX, fillY, toFlood, color);
           }
-
-          dda_line(imageDataA, x1, y1, x2, y1, 0, 0, 0);
-          dda_line(imageDataA, x2, y1, x2, y2, 0, 0, 0);
-          dda_line(imageDataA, x2, y2, x1, y2, 0, 0, 0);
-          dda_line(imageDataA, x1, y2, x1, y1, 0, 0, 0);
 
           const text_base = { x: x1_base + barWidth / 2, y: offsetY + 15 };
           const text_transform = skalaFP(text_base, titik_putar, s);
-
           barNumber.push({
             text: value,
             x: text_transform.x,
             y: text_transform.y,
           });
         }
-
         ctx.putImageData(imageDataA, 0, 0);
-
         ctx.fillStyle = "#000";
         ctx.font = "14px Arial";
         ctx.textAlign = "center";
+
         barNumber.forEach((numberInfo) => {
           ctx.fillText(numberInfo.text, numberInfo.x, numberInfo.y);
         });
+
+        return { dataBar, centerBar };
       }
 
+      var dB, cB;
       let data = [];
       for (let i = 0; i < 5; i++) {
         data.push(Math.floor(Math.random() * 50));
       }
-      drawBars(ctx, data);
+      dB = drawBars(ctx, data).dataBar;
+      cB = drawBars(ctx, data).centerBar;
 
       inputN.addEventListener("input", function (e) {
+        if (isSorting) return;
         var n = parseInt(e.target.value);
+        n = Math.min(n, 50);
         if (n > 0) {
           data = [];
           for (var i = 0; i < n; i++) {
@@ -265,10 +202,13 @@
         } else {
           data = [];
         }
-        drawBars(ctx, data);
+
+        dB = drawBars(ctx, data).dataBar;;
+        cB = drawBars(ctx, data).centerBar;;
       });
 
       inputA.addEventListener("input", function (e) {
+        if (isSorting) return;
         var teks = e.target.value;
         var nilai = teks.split(",");
         data = [];
@@ -278,12 +218,15 @@
             data.push(angka);
           }
         }
-        drawBars(ctx, data);
+
+        dB = drawBars(ctx, data).dataBar;;
+        cB = drawBars(ctx, data).centerBar;;
       });
 
       btnManyDuplicate.addEventListener("click", function () {
+        if (isSorting) return;
         var n = parseInt(inputN.value);
-        var range = Math.floor(n / 2);
+        var range = Math.ceil(n / 2);
         if (range < 1) {
           range = 1;
         }
@@ -291,10 +234,12 @@
         for (var i = 0; i < n; i++) {
           data.push(Math.floor(Math.random() * range));
         }
-        drawBars(ctx, data);
+        dB = drawBars(ctx, data).dataBar;;
+        cB = drawBars(ctx, data).centerBar;;
       });
 
       btnUnique.addEventListener("click", function () {
+        if (isSorting) return;
         var n = parseInt(inputN.value);
         var maxValue = n * 2;
         var unik = [];
@@ -305,8 +250,110 @@
           }
         }
         data = unik;
-        drawBars(ctx, data);
+
+        dB = drawBars(ctx, data).dataBar;;
+        cB = drawBars(ctx, data).centerBar;;
       });
+
+      let isSorting = false;
+      let sortIntervalId = null; // ID untuk setInterval
+      let p = 1; // Loop luar
+      let i = 0; // Loop dalam
+      let tem, tem_dB, tem_cB;
+      let N = 0;
+      let currentDir = "asc";
+      let state = "chooseBar";
+
+      let arr_A = [];
+      let arr_dB = [];
+      let arr_cB = [];
+
+      // fungsi insertion untuk tombol 'sort' (visualisasi)
+      function insertionSortStep() {
+
+        if (!isSorting) {
+          clearInterval(sortIntervalId);
+          sortIntervalId = null;
+          return;
+        }
+
+        let imageDataA = ctx.getImageData(0, 0, width, height);
+        var m, p2, point_array;
+
+        if (state === "chooseBar") {
+          
+          if (p >= N) {
+            isSorting = false;
+            clearInterval(sortIntervalId);
+            sortIntervalId = null;
+            sortBtn.disabled = false;
+            sortedBtn.disabled = false;
+
+           
+            data = arr_A;
+            dB = drawBars(ctx, data).dataBar;;
+            cB = drawBars(ctx, data).centerBar;;
+            return;
+          }
+
+          tem = arr_A[p];
+          tem_dB = arr_dB[p];
+          tem_cB = arr_cB[p];
+          i = p - 1;
+
+          // bar merah (yang sedang dicek)
+          floodFillStack(imageDataA, ctx.canvas, tem_cB.x, tem_cB.y, tem_dB.color, colorData.merah);
+          tem_dB.color = colorData.merah;
+
+          state = "compare";
+        } else if (state === "compare") {
+          let conditionMet = false;
+
+          if (i >= 0) {
+            // Bar hijau (yg sedang dibandingkan)
+            floodFillStack(imageDataA, ctx.canvas, arr_cB[i].x, arr_cB[i].y, arr_dB[i].color, colorData.hijau);
+            arr_dB[i].color = colorData.hijau;
+
+            conditionMet = currentDir === "asc" ? tem < arr_A[i] : tem > arr_A[i];
+          }
+
+          if (conditionMet) {
+            state = "moveBar";
+          } else {
+            state = "insert";
+          }
+        } else if (state === "moveBar") {
+
+          arr_A[i + 1] = arr_A[i];
+          arr_dB[i + 1] = arr_dB[i];
+          arr_cB[i + 1] = arr_cB[i];
+
+          floodFillStack(imageDataA, ctx.canvas, arr_cB[i + 1].x, arr_cB[i + 1].y, colorData.hijau, colorData.orange);
+          arr_dB[i + 1].color = colorData.orange;
+
+          i = i - 1;
+          state = "compare"; 
+        } else if (state === "insert") {
+
+          arr_A[i + 1] = tem;
+          arr_dB[i + 1] = tem_dB;
+          arr_cB[i + 1] = tem_cB;
+
+          floodFillStack(imageDataA, ctx.canvas, arr_cB[i + 1].x, arr_cB[i + 1].y, colorData.merah, colorData.orange);
+          arr_dB[i + 1].color = colorData.orange;
+
+          // Bar oranye (yang sudah di cek)
+          if (i >= 0 && arr_dB[i].color.r === colorData.hijau.r) {
+            floodFillStack(imageDataA, ctx.canvas, arr_cB[i].x, arr_cB[i].y, colorData.hijau, colorData.orange);
+            arr_dB[i].color = colorData.orange;
+          }
+
+          p = p + 1;
+          state = "chooseBar";
+        }
+
+        ctx.putImageData(imageDataA, 0, 0);
+      }
 
       function insertionSort(A, direction) {
         var N = A.length;
@@ -341,24 +388,51 @@
         return A;
       }
 
-
-      function applySortFromDropdown() {
-        if (!data || data.length === 0) {
+      function applySortFromDropdown(type) {
+        if (!data || data.length === 0 || isSorting) {
           return;
         }
 
-        var dir = sortDirection.value;
-        var arr = [];
-        for (var i = 0; i < data.length; i++) {
-          arr.push(data[i]);
-        }
+        currentDir = sortDirection.value;
 
-        insertionSort(arr, dir);
-        data = arr;
-        drawBars(ctx, data);
+        if (type === "sorted") {
+          let arr = [...data];
+          insertionSort(arr, currentDir);
+          data = arr;
+          dB = drawBars(ctx, data).dataBar;;
+          cB = drawBars(ctx, data).centerBar;;
+        } else {
+          isSorting = true;
+          sortBtn.disabled = true;
+          sortedBtn.disabled = true;
+
+          arr_A = [...data];
+          arr_dB = [...dB];
+          arr_cB = [...cB];
+
+          p = 1;
+          N = arr_A.length;
+          state = "chooseBar";
+
+          if (sortIntervalId) {
+            clearInterval(sortIntervalId);
+          }
+
+          let imageDataA = ctx.getImageData(0, 0, width, height);
+          floodFillStack(imageDataA, ctx.canvas, cB[0].x, cB[0].y, dB[0].color, colorData.orange);
+          dB[0].color = colorData.orange;
+          ctx.putImageData(imageDataA, 0, 0);
+
+          sortIntervalId = setInterval(insertionSortStep, 500);
+        }
       }
 
-      sortedBtn.addEventListener("click", applySortFromDropdown);
+      sortedBtn.addEventListener("click", function () {
+        applySortFromDropdown("sorted");
+      });
+      sortBtn.addEventListener("click", function () {
+        applySortFromDropdown("sort");
+      });
     </script>
   </body>
 </html>
