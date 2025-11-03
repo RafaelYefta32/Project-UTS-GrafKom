@@ -46,7 +46,7 @@ function createScale(sx, sy) {
 
 function createRotation(theta) {
   var rotasi = [
-    [Math.cos(theta),-Math.sin(theta), 0],
+    [Math.cos(theta), -Math.sin(theta), 0],
     [Math.sin(theta), Math.cos(theta), 0],
     [0, 0, 1],
   ];
@@ -54,41 +54,41 @@ function createRotation(theta) {
   return rotasi;
 }
 
-function rotation_fp(xc,yc,theta){
-    var m1 = createTranslation(-xc,-yc);
-    var m2 = createRotation(theta);
-    var m3 = createTranslation(xc,yc);
-    
-    var hasil = multiplyMatriks(m3,m2);
-    hasil = multiplyMatriks(hasil,m1);
+function rotation_fp(xc, yc, theta) {
+  var m1 = createTranslation(-xc, -yc);
+  var m2 = createRotation(theta);
+  var m3 = createTranslation(xc, yc);
 
-    return hasil
+  var hasil = multiplyMatriks(m3, m2);
+  hasil = multiplyMatriks(hasil, m1);
+
+  return hasil
 }
 
-function scale_fp(xc,yc,sx,sy){
-    var m1 = createTranslation(-xc,-yc);
-    var m2 = createScale(sx,sy);
-    var m3 = createTranslation(xc,yc);
-    
-    var hasil = multiplyMatriks(m3,m2);
-    hasil = multiplyMatriks(hasil,m1);
+function scale_fp(xc, yc, sx, sy) {
+  var m1 = createTranslation(-xc, -yc);
+  var m2 = createScale(sx, sy);
+  var m3 = createTranslation(xc, yc);
 
-    return hasil
+  var hasil = multiplyMatriks(m3, m2);
+  hasil = multiplyMatriks(hasil, m1);
+
+  return hasil
 }
 
-function transform_titik(titik_lama,m){
-    var x_baru = m[0][0]*titik_lama.x + m[0][1]*titik_lama.y + m[0][2]*1
-    var y_baru = m[1][0]*titik_lama.x + m[1][1]*titik_lama.y + m[1][2]*1
+function transform_titik(titik_lama, m) {
+  var x_baru = m[0][0] * titik_lama.x + m[0][1] * titik_lama.y + m[0][2] * 1
+  var y_baru = m[1][0] * titik_lama.x + m[1][1] * titik_lama.y + m[1][2] * 1
 
-    return {x: x_baru, y: y_baru};
+  return { x: x_baru, y: y_baru };
 }
 
-function transform_array(array_titik,m){
-    var hasil = [];
+function transform_array(array_titik, m) {
+  var hasil = [];
 
-    for (var i=0; i<array_titik.length; i++){
-        var titik_baru = transform_titik(array_titik[i],m);
-        hasil.push(titik_baru);
-    }
-    return hasil;
+  for (var i = 0; i < array_titik.length; i++) {
+    var titik_baru = transform_titik(array_titik[i], m);
+    hasil.push(titik_baru);
+  }
+  return hasil;
 }

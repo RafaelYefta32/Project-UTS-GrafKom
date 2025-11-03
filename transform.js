@@ -37,7 +37,7 @@ function skalaFP(titik_lama, titik_putar, s) {
 
 function translasi_array(titik_lama, jarak_pindah) {
   var array_hasil = [];
-  for (var i=0;i<titik_lama.length;i++){
+  for (var i = 0; i < titik_lama.length; i++) {
     var temp = translasi(titik_lama[i], jarak_pindah);
     array_hasil.push(temp);
   }
