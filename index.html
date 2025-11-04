@@ -22,29 +22,29 @@
     Visualisasi Insertion Sort</div>
 
   <!-- Kontainer utama -->
-  <div class="main-container flex flex-1 gap-6">
+  <div class="main-container flex flex-1 gap-6 overflow-hidden">
     <!-- Kiri -->
-    <div class="left flex-1 rounded-2xl bg-white shadow-xl border border-blue-200 flex items-center justify-center">
+    <div class="left flex-1 rounded-2xl bg-white border border-blue-200 flex items-center justify-center">
       <canvas id="canva1" class="rounded-lg w-full h-full"></canvas>
     </div>
 
     <!-- Kanan -->
-    <div class="right w-[25%] rounded-2xl bg-white shadow-xl border border-blue-200 p-6 flex flex-col justify-between">
-      <div class="right-col1 flex flex-col gap-5">
+    <div class="right w-[25%] rounded-2xl bg-white border border-blue-200 flex flex-col overflow-hidden">
+      <div class="right-col1 flex flex-col gap-5 p-6 overflow-y-auto overflow-x-hidden" style="max-height: 100%;">
         <div class="text-xl font-semibold text-blue-700 mb-2">Pengaturan</div>
 
         <!-- Input N -->
         <div class="flex flex-col gap-2">
           <label for="inputN" class="text-sm font-medium text-gray-700">Jumlah Elemen Random (N):</label>
           <input type="number" id="inputN" min="1" value="5" max="50"
-            class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md" />
+            class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none" />
           <p class="text-xs text-gray-500 italic">Batas nilai N : 50</p>
           <div class="flex gap-2 mt-2">
             <button id="manyDuplicateBtn"
-              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50">Banyak
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Banyak
               Duplikat</button>
             <button id="uniqueBtn"
-              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50">Unik</button>
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Unik</button>
           </div>
         </div>
 
@@ -52,14 +52,14 @@
         <div class="flex flex-col gap-2">
           <label for="inputA" class="text-sm font-medium text-gray-700">Nilai Manual (A):</label>
           <input type="text" id="inputA" value="10,20,30,40,50"
-            class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none shadow-sm hover:shadow-md" />
+            class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none" />
           <p class="text-xs text-gray-500 italic">Gunakan koma untuk memisahkan nilai (contoh: 10,20,30)</p>
         </div>
 
         <div class="flex flex-col gap-3 mt-3">
           <!-- Dropdown Arah -->
           <select id="sortDirection"
-            class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none shadow-sm hover:shadow-md transition-all">
+            class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
@@ -67,10 +67,10 @@
           <!-- Tombol Sort & Sorted -->
           <div class="flex gap-3">
             <button id="sortedBtn"
-              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50">Sorted</button>
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sorted</button>
 
             <button id="sortBtn"
-              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform shadow-md hover:shadow-blue-400/50">Sort</button>
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sort</button>
           </div>
         </div>
 
@@ -80,6 +80,76 @@
           <input type="range" id="speedSlider" min="0.1" max="2.0" value="1.0" step="0.1"
             class="w-full transition-all focus:ring-2 focus:ring-sky-400 outline-none" />
           <p id="speedLabel" class="text-xs text-gray-500 italic">1.0</p>
+        </div>
+
+        <!-- Progress Controls -->
+        <div class="flex flex-col gap-3 mt-3 pb-3 border-b border-gray-200">
+          <label class="text-sm font-medium text-gray-700">Kontrol Progress:</label>
+          <div class="flex gap-2">
+            <button id="playPauseBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              ▶ Play
+            </button>
+            <button id="stopBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-rose-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              ■ Stop
+            </button>
+          </div>
+          <div class="flex gap-2">
+            <button id="prevBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-gray-500 to-slate-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              ⏮ Prev
+            </button>
+            <button id="nextBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-gray-500 to-slate-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              Next ⏭
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Info -->
+        <div
+          class="flex flex-col gap-3 mt-3 p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg border border-blue-200">
+          <div class="text-lg font-semibold text-blue-700 mb-1">Progress Sorting</div>
+
+          <div class="flex flex-col gap-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Status:</span>
+              <span id="statusText" class="font-semibold text-blue-600">Siap</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Pass:</span>
+              <span id="passText" class="font-semibold text-gray-800">-</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Key:</span>
+              <span id="keyText" class="font-semibold text-red-600">-</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Comparing:</span>
+              <span id="compareText" class="font-semibold text-green-600">-</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Action:</span>
+              <span id="actionText" class="font-semibold text-purple-600">-</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mt-2">
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+              <span>Progress</span>
+              <span id="progressPercent">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div id="progressBar" class="h-full bg-gradient-to-r from-blue-500 to-sky-500 transition-all duration-300"
+                style="width: 0%"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -121,6 +191,19 @@
 
     const speedSlider = document.getElementById("speedSlider");
     const speedLabel = document.getElementById("speedLabel");
+
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const statusText = document.getElementById("statusText");
+    const passText = document.getElementById("passText");
+    const keyText = document.getElementById("keyText");
+    const compareText = document.getElementById("compareText");
+    const actionText = document.getElementById("actionText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressBar = document.getElementById("progressBar");
 
     const width = ctx.canvas.getBoundingClientRect().width;
     const height = ctx.canvas.getBoundingClientRect().height;
@@ -368,6 +451,7 @@
     });
 
     let isSorting = false;
+    let isPaused = false;
     let p = 1;
     let i = 0;
     let tem;
@@ -378,6 +462,38 @@
     let arr_A = [];
     let orangeIndices = new Set();
     let currentCompare = -1;
+
+    function updateProgressInfo() {
+      if (!isSorting) {
+        statusText.textContent = "Siap";
+        passText.textContent = "-";
+        keyText.textContent = "-";
+        compareText.textContent = "-";
+        actionText.textContent = "-";
+        progressPercent.textContent = "0%";
+        progressBar.style.width = "0%";
+        return;
+      }
+
+      statusText.textContent = isPaused ? "Dijeda" : "Berjalan";
+      passText.textContent = `${p} / ${N - 1}`;
+      keyText.textContent = keyValue !== null ? keyValue : "-";
+      compareText.textContent = currentCompare >= 0 ? arr_A[currentCompare] : "-";
+
+      if (state === "chooseBar") {
+        actionText.textContent = "Memilih key";
+      } else if (state === "compare") {
+        actionText.textContent = "Membandingkan";
+      } else if (state === "moveBar") {
+        actionText.textContent = "Menggeser bar";
+      } else if (state === "insert") {
+        actionText.textContent = "Menempatkan key";
+      }
+
+      const progress = N > 1 ? ((p - 1) / (N - 1)) * 100 : 0;
+      progressPercent.textContent = `${Math.round(progress)}%`;
+      progressBar.style.width = `${progress}%`;
+    }
 
     function animateLift(targets, targetLift, callback = null) {
       let animationStartTime = performance.now();
@@ -494,7 +610,9 @@
     }
 
     function insertionSortStep() {
-      if (!isSorting) return;
+      if (!isSorting || isPaused) return;
+
+      updateProgressInfo();
 
       const barWidth = 30;
       const spacing = 15;
@@ -506,12 +624,19 @@
           animateKeyLift(0, () => {
             animateLift(Object.keys(liftAmounts).map(Number), 0, () => {
               isSorting = false;
+              isPaused = false;
               sortBtn.disabled = false;
               sortedBtn.disabled = false;
+              playPauseBtn.disabled = true;
+              stopBtn.disabled = true;
+              prevBtn.disabled = true;
+              nextBtn.disabled = true;
+              playPauseBtn.textContent = "▶ Play";
               data = arr_A;
               liftAmounts = {};
               horizontalShifts = {};
               keyValue = null;
+              updateProgressInfo();
               drawBars(ctx, data);
             });
           });
@@ -663,8 +788,14 @@
         drawBars(ctx, data);
       } else {
         isSorting = true;
+        isPaused = false;
         sortBtn.disabled = true;
         sortedBtn.disabled = true;
+        playPauseBtn.disabled = false;
+        stopBtn.disabled = false;
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+        playPauseBtn.textContent = "⏸ Pause";
 
         arr_A = [...data];
         N = arr_A.length;
@@ -677,6 +808,7 @@
         horizontalShifts = {};
         keyValue = null;
 
+        updateProgressInfo();
         drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
 
         insertionSortStep();
@@ -688,6 +820,64 @@
     });
     sortBtn.addEventListener("click", function () {
       applySortFromDropdown("sort");
+    });
+
+    playPauseBtn.addEventListener("click", function () {
+      if (!isSorting) return;
+
+      isPaused = !isPaused;
+      playPauseBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
+
+      if (!isPaused) {
+        updateProgressInfo();
+        insertionSortStep();
+      } else {
+        updateProgressInfo();
+      }
+    });
+
+    stopBtn.addEventListener("click", function () {
+      if (!isSorting) return;
+
+      isSorting = false;
+      isPaused = false;
+      sortBtn.disabled = false;
+      sortedBtn.disabled = false;
+      playPauseBtn.disabled = true;
+      stopBtn.disabled = true;
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      playPauseBtn.textContent = "▶ Play";
+
+      liftAmounts = {};
+      horizontalShifts = {};
+      keyValue = null;
+      orangeIndices = new Set();
+      currentCompare = -1;
+
+      drawBars(ctx, data);
+      updateProgressInfo();
+    });
+
+    prevBtn.addEventListener("click", function () {
+      // Step backward functionality would require storing history
+      // For now, we'll just implement a placeholder
+      if (!isSorting || !isPaused) return;
+      // TODO: Implement step backward
+    });
+
+    nextBtn.addEventListener("click", function () {
+      if (!isSorting || !isPaused) return;
+
+      // Execute one step
+      isPaused = false;
+      insertionSortStep();
+      // Re-pause after step completes
+      setTimeout(() => {
+        isPaused = true;
+        playPauseBtn.textContent = "▶ Play";
+        updateProgressInfo();
+      }, pauseDuration + animationDuration + 50);
     });
   </script>
 </body>
