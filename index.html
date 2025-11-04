@@ -114,13 +114,20 @@
     const width = ctx.canvas.getBoundingClientRect().width;
     const height = ctx.canvas.getBoundingClientRect().height;
 
-    // Modifikasi: Tambahkan variabel untuk animasi lift (pengangkatan bar)
-    let liftAmounts = {}; // Object untuk menyimpan lift per index bar (misal {index: currentLift})
-    const liftTarget = -50; // Target lift (ke atas)
-    const animationDuration = 300; // Durasi animasi dalam ms
-    let animationStartTime = null;
+    let liftAmounts = {};
+    let horizontalShifts = {};
+    let keyLift = 0;
+    let keyShift = 0;
+    let keyBaseX = 0;
+    let keyValue = null;
+    let initialKeyPos = -1;
 
-    function drawBars(ctx, data, orangeIndices = new Set(), liftedIndices = [], currentKey = -1, currentCompare = -1, animate = false) {
+    let liftTarget = 0;
+    const liftMargin = 50;
+    const animationDuration = 300;
+    const pauseDuration = 200;
+
+    function drawBars(ctx, data, orangeIndices = new Set(), currentKey = -1, currentCompare = -1) {
       ctx.clearRect(0, 0, width, height);
 
       if (data.length === 0) {
@@ -144,7 +151,7 @@
       const titik_putar = { x: width / 2, y: offsetY };
 
       const startX = (width - totalWidth) / 2;
-      const maxValue = Math.max(...data) > 0 ? Math.max(...data) : 1;
+      const maxValue = Math.max(...data.filter(v => v !== null), keyValue !== null ? keyValue : 0) > 0 ? Math.max(...data.filter(v => v !== null), keyValue !== null ? keyValue : 0) : 1;
       const scaleHeight = (height * 0.4) / maxValue;
 
       let barNumber = [];
@@ -153,20 +160,22 @@
 
       for (let i = 0; i < data.length; i++) {
         const value = data[i];
+        if (value === null) continue;
+
         const barHeight = value * scaleHeight;
 
-        const x1_base = Math.floor(startX + i * (barWidth + spacing));
+        const baseX = Math.floor(startX + i * (barWidth + spacing));
         const y1_base = Math.floor(offsetY - barHeight);
-        const x2_base = Math.floor(x1_base + barWidth);
+        const x2_base = Math.floor(baseX + barWidth);
         const y2_base = Math.floor(offsetY);
 
-        // Modifikasi: Gunakan liftAmount yang dianimasikan per index
+        const currentHorizontal = horizontalShifts[i] || 0;
         const currentLift = liftAmounts[i] || 0;
-        let m = createTranslation(0, currentLift);
+        let m = createTranslation(currentHorizontal, currentLift);
 
-        let p1_base = { x: x1_base, y: y1_base };
+        let p1_base = { x: baseX, y: y1_base };
         let p2_base = { x: x2_base, y: y2_base };
-        let text_base = { x: x1_base + barWidth / 2, y: offsetY + 15 };
+        let text_base = { x: baseX + barWidth / 2, y: offsetY + 15 };
 
         let p1_transform = transform_titik(p1_base, m);
         let p2_transform = transform_titik(p2_base, m);
@@ -184,9 +193,6 @@
         let color = colorData.blue;
         if (orangeIndices.has(i)) {
           color = colorData.orange;
-        }
-        if (i === currentKey) {
-          color = colorData.merah;
         }
         if (i === currentCompare) {
           color = colorData.hijau;
@@ -211,6 +217,57 @@
           y: text_transform.y,
         });
       }
+
+      // Draw the key separately if exists
+      if (keyValue !== null) {
+        const barHeight = keyValue * scaleHeight;
+
+        const baseX = keyBaseX;
+        const y1_base = Math.floor(offsetY - barHeight);
+        const x2_base = Math.floor(baseX + barWidth);
+        const y2_base = Math.floor(offsetY);
+
+        let m = createTranslation(keyShift, keyLift);
+
+        let p1_base = { x: baseX, y: y1_base };
+        let p2_base = { x: x2_base, y: y2_base };
+        let text_base = { x: baseX + barWidth / 2, y: offsetY + 15 };
+
+        let p1_transform = transform_titik(p1_base, m);
+        let p2_transform = transform_titik(p2_base, m);
+        let text_transform = transform_titik(text_base, m);
+
+        p1_transform = skalaFP(p1_transform, titik_putar, s);
+        p2_transform = skalaFP(p2_transform, titik_putar, s);
+        text_transform = skalaFP(text_transform, titik_putar, s);
+
+        const x1 = Math.floor(p1_transform.x);
+        const y1 = Math.floor(p1_transform.y);
+        const x2 = Math.floor(p2_transform.x);
+        const y2 = Math.floor(p2_transform.y);
+
+        let color = colorData.merah; // Key is always red
+
+        dataBar.push({ x1: x1, y1: y1, x2: x2, y2: y2, color });
+
+        bar(imageDataA, { x1: x1, y1: y1, x2: x2, y2: y2 }, 0, 0, 0);
+
+        const fillX = Math.floor((x1 + x2) / 2);
+        const fillY = Math.floor((y1 + y2) / 2);
+        centerBar.push({ x: fillX, y: fillY });
+
+        const toFlood = { r: 0, g: 0, b: 0, a: 0 };
+        if (fillX > x1 && fillX < x2 && fillY > y1 && fillY < y2) {
+          floodFillStack(imageDataA, ctx.canvas, fillX, fillY, toFlood, color);
+        }
+
+        barNumber.push({
+          text: keyValue,
+          x: text_transform.x,
+          y: text_transform.y,
+        });
+      }
+
       ctx.putImageData(imageDataA, 0, 0);
       ctx.fillStyle = "#000";
       ctx.font = "14px Arial";
@@ -292,7 +349,6 @@
     });
 
     let isSorting = false;
-    let sortIntervalId = null;
     let p = 1;
     let i = 0;
     let tem;
@@ -302,13 +358,10 @@
 
     let arr_A = [];
     let orangeIndices = new Set();
-    let currentKey = -1;
     let currentCompare = -1;
-    let liftedIndices = [];
 
-    // Modifikasi: Fungsi untuk memulai animasi lift
     function animateLift(targets, targetLift, callback = null) {
-      animationStartTime = performance.now();
+      let animationStartTime = performance.now();
       const initialLifts = {};
       targets.forEach(index => {
         initialLifts[index] = liftAmounts[index] || 0;
@@ -317,130 +370,240 @@
       function animate() {
         const elapsed = performance.now() - animationStartTime;
         const progress = Math.min(elapsed / animationDuration, 1);
-        const ease = progress * (2 - progress); // Ease in-out quadratic
+        const ease = progress * (2 - progress);
 
         targets.forEach(index => {
           const start = initialLifts[index];
           liftAmounts[index] = start + (targetLift - start) * ease;
         });
 
-        drawBars(ctx, arr_A, orangeIndices, liftedIndices, currentKey, currentCompare, true);
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
 
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
-          // Setel ke nilai akhir untuk presisi
           targets.forEach(index => {
             liftAmounts[index] = targetLift;
+            if (targetLift === 0) delete liftAmounts[index];
           });
-          if (callback) {
-            callback();
-          }
+          if (callback) callback();
         }
       }
 
       requestAnimationFrame(animate);
     }
 
-    // fungsi insertion untuk tombol 'sort' (visualisasi)
-    function insertionSortStep() {
+    function animateHorizontal(targets, targetShift, callback = null) {
+      let animationStartTime = performance.now();
+      const initialShifts = {};
+      targets.forEach(index => {
+        initialShifts[index] = horizontalShifts[index] || 0;
+      });
 
-      if (!isSorting) {
-        clearInterval(sortIntervalId);
-        sortIntervalId = null;
-        return;
+      function animate() {
+        const elapsed = performance.now() - animationStartTime;
+        const progress = Math.min(elapsed / animationDuration, 1);
+        const ease = progress * (2 - progress);
+
+        targets.forEach(index => {
+          const start = initialShifts[index];
+          horizontalShifts[index] = start + (targetShift - start) * ease;
+        });
+
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          targets.forEach(index => {
+            horizontalShifts[index] = targetShift;
+            if (targetShift === 0) delete horizontalShifts[index];
+          });
+          if (callback) callback();
+        }
       }
 
+      requestAnimationFrame(animate);
+    }
+
+    function animateKeyLift(targetLift, callback = null) {
+      let animationStartTime = performance.now();
+      const initialLift = keyLift;
+
+      function animate() {
+        const elapsed = performance.now() - animationStartTime;
+        const progress = Math.min(elapsed / animationDuration, 1);
+        const ease = progress * (2 - progress);
+
+        keyLift = initialLift + (targetLift - initialLift) * ease;
+
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          keyLift = targetLift;
+          if (callback) callback();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function animateKeyHorizontal(targetShift, callback = null) {
+      let animationStartTime = performance.now();
+      const initialShift = keyShift;
+
+      function animate() {
+        const elapsed = performance.now() - animationStartTime;
+        const progress = Math.min(elapsed / animationDuration, 1);
+        const ease = progress * (2 - progress);
+
+        keyShift = initialShift + (targetShift - initialShift) * ease;
+
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          keyShift = targetShift;
+          if (callback) callback();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function insertionSortStep() {
+      if (!isSorting) return;
+
+      const barWidth = 30;
+      const spacing = 15;
+      const dx = barWidth + spacing;
+
       if (state === "chooseBar") {
-
         if (p >= N) {
-          // Reset semua lift ke 0 dengan animasi
-          const allIndices = Array.from({ length: N }, (_, index) => index);
-          animateLift(allIndices, 0, () => {
-            isSorting = false;
-            clearInterval(sortIntervalId);
-            sortIntervalId = null;
-            sortBtn.disabled = false;
-            sortedBtn.disabled = false;
-
-            data = arr_A;
-            liftAmounts = {}; // Reset setelah animasi selesai
-            drawBars(ctx, data);
+          // Reset all
+          animateKeyLift(0, () => {
+            animateLift(Object.keys(liftAmounts).map(Number), 0, () => {
+              isSorting = false;
+              sortBtn.disabled = false;
+              sortedBtn.disabled = false;
+              data = arr_A;
+              liftAmounts = {};
+              horizontalShifts = {};
+              keyValue = null;
+              drawBars(ctx, data);
+            });
           });
           return;
         }
 
+        initialKeyPos = p;
+        const totalWidth = N * barWidth + (N - 1) * spacing;
+        const startX = (width - totalWidth) / 2;
+        keyBaseX = startX + p * (barWidth + spacing);
         tem = arr_A[p];
-        i = p - 1;
+        keyValue = tem;
+        arr_A[p] = null;
+        keyShift = 0;
+        keyLift = 0;
 
-        currentKey = p;
         currentCompare = -1;
-        liftedIndices = [p];
 
+        // Calculate dynamic liftTarget
+        const maxValue = Math.max(...arr_A.filter(v => v !== null), keyValue) > 0 ? Math.max(...arr_A.filter(v => v !== null), keyValue) : 1;
+        const scaleHeight = (height * 0.4) / maxValue;
+        const maxBarHeight = maxValue * scaleHeight;
+        liftTarget = - (maxBarHeight + liftMargin);
+
+        animateKeyLift(liftTarget, () => {
+          setTimeout(insertionSortStep, pauseDuration);
+        });
+
+        i = p - 1;
         state = "compare";
 
-        // Modifikasi: Animasi lift ke atas untuk bar yang dipilih
-        animateLift([p], liftTarget);
-
-        drawBars(ctx, arr_A, orangeIndices, liftedIndices, currentKey, currentCompare);
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+        return;
       } else if (state === "compare") {
         let conditionMet = false;
 
         if (i >= 0) {
           currentCompare = i;
-          liftedIndices = [currentKey, i];
 
-          // Modifikasi: Animasi lift untuk bar pembanding juga (jika diinginkan, sesuaikan)
-          animateLift([i], liftTarget / 2); // Lift lebih sedikit untuk pembanding
+          // No lift for compare bar
+          setTimeout(insertionSortStep, pauseDuration);
 
-          conditionMet = currentDir === "asc" ? tem < arr_A[i] : tem > arr_A[i];
+          conditionMet = currentDir === "asc" ? keyValue < arr_A[i] : keyValue > arr_A[i];
+        } else {
+          setTimeout(insertionSortStep, pauseDuration);
         }
 
-        drawBars(ctx, arr_A, orangeIndices, liftedIndices, currentKey, currentCompare);
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
 
         if (conditionMet) {
           state = "moveBar";
         } else {
           state = "insert";
         }
+        return;
       } else if (state === "moveBar") {
+        // Shift bar at i to right (to i+1)
+        horizontalShifts[i] = horizontalShifts[i] || 0;
 
-        arr_A[i + 1] = arr_A[i];
-        orangeIndices.add(i + 1);
+        // Animate bar shift to right
+        animateHorizontal([i], dx, () => {
+          arr_A[i + 1] = arr_A[i];
+          arr_A[i] = null;
+          horizontalShifts[i + 1] = 0;
+          delete horizontalShifts[i];
 
-        i = i - 1;
-        currentCompare = -1;
-        liftedIndices = [currentKey];
+          orangeIndices.add(i + 1);
 
-        // Modifikasi: Reset lift untuk bar yang digeser (animasi turun)
-        animateLift([i + 2], 0); // i+1 sebelumnya, tapi setelah shift i = i-1, jadi i+2 adalah posisi yang baru saja digeser
+          i = i - 1;
+          currentCompare = -1;
+
+          setTimeout(insertionSortStep, pauseDuration);
+        });
+
+        // Simultaneously shift key to left
+        const newKeyShift = keyShift - dx;
+        animateKeyHorizontal(newKeyShift);
 
         state = "compare";
-
-        drawBars(ctx, arr_A, orangeIndices, liftedIndices, currentKey, currentCompare);
+        return;
       } else if (state === "insert") {
+        const targetPos = i + 1;
+        const targetDx = (targetPos - initialKeyPos) * dx;
 
-        arr_A[i + 1] = tem;
-        orangeIndices.add(i + 1);
+        animateKeyHorizontal(targetDx, () => {
+          // Transfer key to array bar
+          arr_A[targetPos] = keyValue;
+          liftAmounts[targetPos] = keyLift;
+          horizontalShifts[targetPos] = 0; // Set to 0 since base position is correct
+          orangeIndices.add(targetPos);
+          if (i >= 0) {
+            orangeIndices.add(i);
+          }
+          keyValue = null;
+          keyShift = 0;
+          keyLift = 0;
 
-        if (i >= 0) {
-          orangeIndices.add(i);
-        }
+          // Animate the inserted bar down
+          animateLift([targetPos], 0, () => {
+            delete liftAmounts[targetPos];
+            delete horizontalShifts[targetPos];
 
-        currentKey = -1;
-        currentCompare = -1;
-        liftedIndices = [];
+            currentCompare = -1;
 
-        // Modifikasi: Animasi turun untuk bar yang diinsert
-        animateLift([i + 1], 0);
-        if (i >= 0) {
-          animateLift([i], 0);
-        }
+            p = p + 1;
+            state = "chooseBar";
 
-        p = p + 1;
-        state = "chooseBar";
-
-        drawBars(ctx, arr_A, orangeIndices, liftedIndices, currentKey, currentCompare);
+            setTimeout(insertionSortStep, pauseDuration);
+          });
+        });
+        return;
       }
     }
 
@@ -489,19 +652,15 @@
         p = 1;
         state = "chooseBar";
 
-        if (sortIntervalId) {
-          clearInterval(sortIntervalId);
-        }
-
         orangeIndices = new Set([0]);
-        currentKey = -1;
         currentCompare = -1;
-        liftedIndices = [];
-        liftAmounts = {}; // Reset lift amounts
+        liftAmounts = {};
+        horizontalShifts = {};
+        keyValue = null;
 
-        drawBars(ctx, arr_A, orangeIndices, liftedIndices, currentKey, currentCompare);
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
 
-        sortIntervalId = setInterval(insertionSortStep, 500 + animationDuration); // Sesuaikan interval dengan durasi animasi
+        insertionSortStep();
       }
     }
 
