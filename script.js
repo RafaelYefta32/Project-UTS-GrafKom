@@ -89,10 +89,10 @@ function floodFillNaive(imageDataA, canvas, x, y, toFlood, color) {
   var b1 = imageDataA.data[index + 2];
 
   if (r1 == toFlood.r && g1 == toFlood.g && b1 == toFlood.b) {
-    imageDataA.data[index] = color.r; //R
-    imageDataA.data[index + 1] = color.g; //G
-    imageDataA.data[index + 2] = color.b; //B
-    imageDataA.data[index + 3] = 255; //A
+    imageDataA.data[index] = color.r;
+    imageDataA.data[index + 1] = color.g;
+    imageDataA.data[index + 2] = color.b;
+    imageDataA.data[index + 3] = 255;
 
     floodFillNaive(imageDataA, canvas, x + 1, y, toFlood, color);
     floodFillNaive(imageDataA, canvas, x, y + 1, toFlood, color);

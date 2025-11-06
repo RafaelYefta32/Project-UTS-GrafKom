@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Visualisasi Insertion Sort</title>
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Tetap gunakan style.css -->
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
     rel="stylesheet" />
@@ -16,24 +14,19 @@
 
 <body
   class="bg-gradient-to-br from-white via-sky-50 to-blue-100 text-gray-800 flex flex-col gap-6 p-6 h-screen font-[Plus_Jakarta_Sans]">
-  <!-- Judul -->
   <div
     class="title text-3xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 drop-shadow-sm">
     Visualisasi Insertion Sort</div>
 
-  <!-- Kontainer utama -->
   <div class="main-container flex flex-1 gap-6 overflow-hidden">
-    <!-- Kiri -->
     <div class="left flex-1 rounded-2xl bg-white border border-blue-200 flex items-center justify-center">
       <canvas id="canva1" class="rounded-lg w-full h-full"></canvas>
     </div>
 
-    <!-- Kanan -->
     <div class="right w-[25%] rounded-2xl bg-white border border-blue-200 flex flex-col overflow-hidden">
       <div class="right-col1 flex flex-col gap-5 p-6 overflow-y-auto overflow-x-hidden" style="max-height: 100%;">
         <div class="text-xl font-semibold text-blue-700 mb-2">Pengaturan</div>
 
-        <!-- Input N -->
         <div class="flex flex-col gap-2">
           <label for="inputN" class="text-sm font-medium text-gray-700">Jumlah Elemen Random (N):</label>
           <input type="number" id="inputN" min="1" value="5" max="50"
@@ -63,7 +56,6 @@
           </div>
         </div>
 
-        <!-- Input A -->
         <div class="flex flex-col gap-2">
           <label for="inputA" class="text-sm font-medium text-gray-700">Nilai Manual (A):</label>
           <input type="text" id="inputA" value="10,20,30,40,50" autocomplete="off"
@@ -72,14 +64,12 @@
         </div>
 
         <div class="flex flex-col gap-3 mt-3">
-          <!-- Dropdown Arah -->
           <select id="sortDirection"
             class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none">
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
           </select>
 
-          <!-- Tombol Sort & Sorted -->
           <div class="flex gap-3">
             <button id="sortedBtn"
               class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sorted</button>
@@ -89,7 +79,6 @@
           </div>
         </div>
 
-        <!-- Kecepatan Sorting -->
         <div class="flex flex-col gap-2 mt-3">
           <label for="speedSlider" class="text-sm font-medium text-gray-700">Kecepatan Sorting:</label>
           <input type="range" id="speedSlider" min="0.1" max="2.0" value="1.0" step="0.1"
@@ -97,7 +86,6 @@
           <p id="speedLabel" class="text-xs text-gray-500 italic">1.0</p>
         </div>
 
-        <!-- Progress Controls -->
         <div class="flex flex-col gap-3 mt-3 pb-3 border-b border-gray-200">
           <label class="text-sm font-medium text-gray-700">Kontrol Progress:</label>
           <div class="flex gap-2">
@@ -122,7 +110,6 @@
           </div>
         </div>
 
-        <!-- Progress Info -->
         <div
           class="flex flex-col gap-3 mt-3 p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg border border-blue-200">
           <div class="text-lg font-semibold text-blue-700 mb-1">Progress Sorting</div>
@@ -154,7 +141,6 @@
             </div>
           </div>
 
-          <!-- Progress Bar -->
           <div class="mt-2">
             <div class="flex justify-between text-xs text-gray-600 mb-1">
               <span>Progress</span>
@@ -337,7 +323,6 @@
         });
       }
 
-      // Draw the key separately if exists
       if (keyValue !== null) {
         const barHeight = keyValue * scaleHeight;
 
@@ -365,7 +350,7 @@
         const x2 = Math.floor(p2_transform.x);
         const y2 = Math.floor(p2_transform.y);
 
-        let color = colorData.merah; // Key is always red
+        let color = colorData.merah;
 
         dataBar.push({ x1: x1, y1: y1, x2: x2, y2: y2, color });
 
@@ -659,7 +644,6 @@
 
       if (state === "chooseBar") {
         if (p >= N) {
-          // Reset all
           animateKeyLift(0, () => {
             animateLift(Object.keys(liftAmounts).map(Number), 0, () => {
               isSorting = false;
@@ -694,7 +678,6 @@
 
         currentCompare = -1;
 
-        // Calculate dynamic liftTarget
         const maxValue = Math.max(...arr_A.filter(v => v !== null), keyValue) > 0 ? Math.max(...arr_A.filter(v => v !== null), keyValue) : 1;
         const scaleHeight = (height * 0.4) / maxValue;
         const maxBarHeight = maxValue * scaleHeight;
@@ -714,10 +697,7 @@
 
         if (i >= 0) {
           currentCompare = i;
-
-          // No lift for compare bar
           setTimeout(insertionSortStep, pauseDuration);
-
           conditionMet = currentDir === "asc" ? keyValue < arr_A[i] : keyValue > arr_A[i];
         } else {
           setTimeout(insertionSortStep, pauseDuration);
@@ -732,10 +712,8 @@
         }
         return;
       } else if (state === "moveBar") {
-        // Shift bar at i to right (to i+1)
         horizontalShifts[i] = horizontalShifts[i] || 0;
 
-        // Animate bar shift to right
         animateHorizontal([i], dx, () => {
           arr_A[i + 1] = arr_A[i];
           arr_A[i] = null;
@@ -750,7 +728,6 @@
           setTimeout(insertionSortStep, pauseDuration);
         });
 
-        // Simultaneously shift key to left
         const newKeyShift = keyShift - dx;
         animateKeyHorizontal(newKeyShift);
 
@@ -761,10 +738,9 @@
         const targetDx = (targetPos - initialKeyPos) * dx;
 
         animateKeyHorizontal(targetDx, () => {
-          // Transfer key to array bar
           arr_A[targetPos] = keyValue;
           liftAmounts[targetPos] = keyLift;
-          horizontalShifts[targetPos] = 0; // Set to 0 since base position is correct
+          horizontalShifts[targetPos] = 0;
           orangeIndices.add(targetPos);
           if (i >= 0) {
             orangeIndices.add(i);
@@ -773,7 +749,6 @@
           keyShift = 0;
           keyLift = 0;
 
-          // Animate the inserted bar down
           animateLift([targetPos], 0, () => {
             delete liftAmounts[targetPos];
             delete horizontalShifts[targetPos];
@@ -903,12 +878,9 @@
     });
 
     prevBtn.addEventListener("click", function () {
-      // Step backward functionality would require storing history
-      // For now, we'll just implement a placeholder
       if (!isSorting || !isPaused) {
         return;
       }
-      // TODO: Implement step backward
     });
 
     nextBtn.addEventListener("click", function () {
@@ -916,10 +888,8 @@
         return;
       }
 
-      // Execute one step
       isPaused = false;
       insertionSortStep();
-      // Re-pause after step completes
       setTimeout(() => {
         isPaused = true;
         playPauseBtn.textContent = "▶ Play";
@@ -928,5 +898,4 @@
     });
   </script>
 </body>
-
 </html>
