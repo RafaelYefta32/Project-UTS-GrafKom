@@ -1,529 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visualisasi Insertion Sort</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualisasi Insertion Sort</title>
 
-  <body class="bg-gradient-to-br from-white via-sky-50 to-blue-100 text-gray-800 flex flex-col gap-6 p-6 h-screen font-[Plus_Jakarta_Sans]">
-    <div class="title text-3xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 drop-shadow-sm">Visualisasi Insertion Sort</div>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+</head>
 
-    <div class="main-container flex flex-1 gap-6 overflow-hidden">
-      <div class="left flex-1 rounded-2xl bg-white border border-blue-200 flex items-center justify-center">
-        <canvas id="canva1" class="rounded-lg w-full h-full"></canvas>
-      </div>
+<body
+  class="bg-gradient-to-br from-white via-sky-50 to-blue-100 text-gray-800 flex flex-col gap-6 p-6 h-screen font-[Plus_Jakarta_Sans]">
+  <div
+    class="title text-3xl font-semibold text-center text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 drop-shadow-sm">
+    Visualisasi Insertion Sort</div>
 
-      <div class="right w-[25%] rounded-2xl bg-white border border-blue-200 flex flex-col overflow-hidden">
-        <div class="right-col1 flex flex-col gap-5 p-6 overflow-y-auto overflow-x-hidden" style="max-height: 100%">
-          <div class="text-xl font-semibold text-blue-700 mb-2">Pengaturan</div>
+  <div class="main-container flex flex-1 gap-6 overflow-hidden">
+    <div class="left flex-1 rounded-2xl bg-white border border-blue-200 flex items-center justify-center">
+      <canvas id="canva1" class="rounded-lg w-full h-full"></canvas>
+    </div>
 
-          <div class="flex flex-col gap-2">
-            <label for="inputN" class="text-sm font-medium text-gray-700">Jumlah Elemen Random (N):</label>
-            <input type="number" id="inputN" min="1" value="5" max="50" class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none" />
-            <script>
-              const input_N = document.getElementById("inputN");
-              const max = parseInt(input_N.max);
-              const min = parseInt(input_N.min);
+    <div class="right w-[25%] rounded-2xl bg-white border border-blue-200 flex flex-col overflow-hidden">
+      <div class="right-col1 flex flex-col gap-5 p-6 overflow-y-auto overflow-x-hidden" style="max-height: 100%">
+        <div class="text-xl font-semibold text-blue-700 mb-2">Pengaturan</div>
 
-              input_N.addEventListener("input", () => {
-                let val = parseInt(input_N.value);
-                if (val > max) {
-                  input_N.value = max;
-                }
-                if (val < min) {
-                  input_N.value = min;
-                }
-              });
-            </script>
-            <p class="text-xs text-gray-500 italic">Batas nilai N : 50</p>
-            <div class="flex gap-2 mt-2">
-              <button id="manyDuplicateBtn" class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Banyak Duplikat</button>
-              <button id="uniqueBtn" class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Unik</button>
+        <div class="flex flex-col gap-2">
+          <label for="inputN" class="text-sm font-medium text-gray-700">Jumlah Elemen Random (N):</label>
+          <input type="number" id="inputN" min="1" value="5" max="50"
+            class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none" />
+          <script>
+            const input_N = document.getElementById("inputN");
+            const max = parseInt(input_N.max);
+            const min = parseInt(input_N.min);
+
+            input_N.addEventListener("input", () => {
+              let val = parseInt(input_N.value);
+              if (val > max) {
+                input_N.value = max;
+              }
+              if (val < min) {
+                input_N.value = min;
+              }
+            });
+          </script>
+          <p class="text-xs text-gray-500 italic">Batas nilai N : 50</p>
+          <div class="flex gap-2 mt-2">
+            <button id="manyDuplicateBtn"
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Banyak
+              Duplikat</button>
+            <button id="uniqueBtn"
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Unik</button>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="inputA" class="text-sm font-medium text-gray-700">Nilai Manual (A):</label>
+          <input type="text" id="inputA" value="10,20,30,40,50" autocomplete="off"
+            class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none" />
+          <p class="text-xs text-gray-500 italic">Gunakan koma untuk memisahkan nilai (contoh: 10,20,30)</p>
+        </div>
+
+        <div class="flex flex-col gap-3 mt-3">
+          <select id="sortDirection"
+            class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+
+          <div class="flex gap-3">
+            <button id="sortedBtn"
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sorted</button>
+
+            <button id="sortBtn"
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sort</button>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 mt-3">
+          <label for="speedSlider" class="text-sm font-medium text-gray-700">Kecepatan Sorting:</label>
+          <input type="range" id="speedSlider" min="0.1" max="2.0" value="1.0" step="0.1"
+            class="w-full transition-all focus:ring-2 focus:ring-sky-400 outline-none" />
+          <p id="speedLabel" class="text-xs text-gray-500 italic">1.0</p>
+        </div>
+
+        <div class="flex flex-col gap-3 mt-3 pb-3 border-b border-gray-200">
+          <label class="text-sm font-medium text-gray-700">Kontrol Progress:</label>
+          <div class="flex gap-2">
+            <button id="playPauseBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              ▶ Play
+            </button>
+            <button id="stopBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-rose-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              ■ Stop
+            </button>
+          </div>
+          <div class="flex gap-2">
+            <button id="prevBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-gray-500 to-slate-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              ⏮ Prev
+            </button>
+            <button id="nextBtn" disabled
+              class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-gray-500 to-slate-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+              Next ⏭
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col gap-3 mt-3 p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg border border-blue-200">
+          <div class="text-lg font-semibold text-blue-700 mb-1">Progress Sorting</div>
+
+          <div class="flex flex-col gap-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Status:</span>
+              <span id="statusText" class="font-semibold text-blue-600">Siap</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Pass:</span>
+              <span id="passText" class="font-semibold text-gray-800">-</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Key:</span>
+              <span id="keyText" class="font-semibold text-red-600">-</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Comparing:</span>
+              <span id="compareText" class="font-semibold text-green-600">-</span>
+            </div>
+
+            <div class="flex justify-between">
+              <span class="text-gray-600">Action:</span>
+              <span id="actionText" class="font-semibold text-purple-600">-</span>
             </div>
           </div>
 
-          <div class="flex flex-col gap-2">
-            <label for="inputA" class="text-sm font-medium text-gray-700">Nilai Manual (A):</label>
-            <input type="text" id="inputA" value="10,20,30,40,50" autocomplete="off" class="border border-gray-300 rounded-lg px-3 py-2 transition-all focus:ring-2 focus:ring-sky-400 focus:border-sky-400 outline-none" />
-            <p class="text-xs text-gray-500 italic">Gunakan koma untuk memisahkan nilai (contoh: 10,20,30)</p>
-          </div>
-
-          <div class="flex flex-col gap-3 mt-3">
-            <select id="sortDirection" class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-sky-400 outline-none">
-              <option value="asc">Ascending</option>
-              <option value="desc">Descending</option>
-            </select>
-
-            <div class="flex gap-3">
-              <button id="sortedBtn" class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sorted</button>
-
-              <button id="sortBtn" class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-sky-500 hover:scale-105 transition-transform">Sort</button>
+          <div class="mt-2">
+            <div class="flex justify-between text-xs text-gray-600 mb-1">
+              <span>Progress</span>
+              <span id="progressPercent">0%</span>
             </div>
-          </div>
-
-          <div class="flex flex-col gap-2 mt-3">
-            <label for="speedSlider" class="text-sm font-medium text-gray-700">Kecepatan Sorting:</label>
-            <input type="range" id="speedSlider" min="0.1" max="2.0" value="1.0" step="0.1" class="w-full transition-all focus:ring-2 focus:ring-sky-400 outline-none" />
-            <p id="speedLabel" class="text-xs text-gray-500 italic">1.0</p>
-          </div>
-
-          <div class="flex flex-col gap-3 mt-3 pb-3 border-b border-gray-200">
-            <label class="text-sm font-medium text-gray-700">Kontrol Progress:</label>
-            <div class="flex gap-2">
-              <button
-                id="playPauseBtn"
-                disabled
-                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                ▶ Play
-              </button>
-              <button
-                id="stopBtn"
-                disabled
-                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-red-500 to-rose-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                ■ Stop
-              </button>
-            </div>
-            <div class="flex gap-2">
-              <button
-                id="prevBtn"
-                disabled
-                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-gray-500 to-slate-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                ⏮ Prev
-              </button>
-              <button
-                id="nextBtn"
-                disabled
-                class="flex-1 py-2 rounded-md text-sm font-semibold text-white bg-gradient-to-r from-gray-500 to-slate-500 hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                Next ⏭
-              </button>
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-3 mt-3 p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg border border-blue-200">
-            <div class="text-lg font-semibold text-blue-700 mb-1">Progress Sorting</div>
-
-            <div class="flex flex-col gap-2 text-sm">
-              <div class="flex justify-between">
-                <span class="text-gray-600">Status:</span>
-                <span id="statusText" class="font-semibold text-blue-600">Siap</span>
-              </div>
-
-              <div class="flex justify-between">
-                <span class="text-gray-600">Pass:</span>
-                <span id="passText" class="font-semibold text-gray-800">-</span>
-              </div>
-
-              <div class="flex justify-between">
-                <span class="text-gray-600">Key:</span>
-                <span id="keyText" class="font-semibold text-red-600">-</span>
-              </div>
-
-              <div class="flex justify-between">
-                <span class="text-gray-600">Comparing:</span>
-                <span id="compareText" class="font-semibold text-green-600">-</span>
-              </div>
-
-              <div class="flex justify-between">
-                <span class="text-gray-600">Action:</span>
-                <span id="actionText" class="font-semibold text-purple-600">-</span>
-              </div>
-            </div>
-
-            <div class="mt-2">
-              <div class="flex justify-between text-xs text-gray-600 mb-1">
-                <span>Progress</span>
-                <span id="progressPercent">0%</span>
-              </div>
-              <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                <div id="progressBar" class="h-full bg-gradient-to-r from-blue-500 to-sky-500 transition-all duration-300" style="width: 0%"></div>
-              </div>
+            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+              <div id="progressBar" class="h-full bg-gradient-to-r from-blue-500 to-sky-500 transition-all duration-300"
+                style="width: 0%"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="script.js"></script>
-    <script src="transform.js"></script>
-    <script src="transform_komposit.js"></script>
+  <script src="script.js"></script>
+  <script src="transform.js"></script>
+  <script src="transform_komposit.js"></script>
 
-    <script>
-      function setupCanvas(canvas) {
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        return canvas.getContext("2d");
+  <script>
+    function setupCanvas(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      return canvas.getContext("2d");
+    }
+
+    const canvas = document.getElementById("canva1");
+    let ctx = setupCanvas(canvas);
+
+    const colorData = {
+      blue: { r: 109, g: 197, b: 255 },
+      orange: { r: 255, g: 165, b: 0 },
+      merah: { r: 255, g: 102, b: 102 },
+      hijau: { r: 144, g: 238, b: 144 },
+    };
+
+    var cnv = canvas;
+
+    const btnManyDuplicate = document.getElementById("manyDuplicateBtn");
+    const btnUnique = document.getElementById("uniqueBtn");
+
+    const inputN = document.getElementById("inputN");
+    const inputA = document.getElementById("inputA");
+
+    const sortDirection = document.getElementById("sortDirection");
+    const sortBtn = document.getElementById("sortBtn");
+    const sortedBtn = document.getElementById("sortedBtn");
+
+    const speedSlider = document.getElementById("speedSlider");
+    const speedLabel = document.getElementById("speedLabel");
+
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const statusText = document.getElementById("statusText");
+    const passText = document.getElementById("passText");
+    const keyText = document.getElementById("keyText");
+    const compareText = document.getElementById("compareText");
+    const actionText = document.getElementById("actionText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressBar = document.getElementById("progressBar");
+
+    const width = ctx.canvas.getBoundingClientRect().width;
+    const height = ctx.canvas.getBoundingClientRect().height;
+
+    let liftAmounts = {};
+    let horizontalShifts = {};
+    let keyLift = 0;
+    let keyShift = 0;
+    let keyBaseX = 0;
+    let keyValue = null;
+    let initialKeyPos = -1;
+
+    const liftMargin = 50;
+    const animationDuration = 300;
+    let pauseDuration = 200;
+
+    const basePause = 200;
+
+    // generate 5 data random awal
+    let data = [];
+    for (let i = 0; i < 5; i++) {
+      data.push(Math.floor(Math.random() * 50));
+    }
+    drawBars(ctx, data);
+
+    // slider kecepatan sorting
+    speedSlider.addEventListener("input", function (e) {
+      const val = parseFloat(e.target.value);
+      speedLabel.textContent = val.toFixed(1);
+      pauseDuration = Math.round(basePause / val);
+    });
+
+    // tombol input nilai N
+    inputN.addEventListener("input", function (e) {
+      if (isSorting) {
+        return;
       }
-
-      const canvas = document.getElementById("canva1");
-      let ctx = setupCanvas(canvas);
-
-      const colorData = {
-        blue: { r: 109, g: 197, b: 255 },
-        orange: { r: 255, g: 165, b: 0 },
-        merah: { r: 255, g: 102, b: 102 },
-        hijau: { r: 144, g: 238, b: 144 },
-      };
-
-      var cnv = canvas;
-
-      const btnManyDuplicate = document.getElementById("manyDuplicateBtn");
-      const btnUnique = document.getElementById("uniqueBtn");
-
-      const inputN = document.getElementById("inputN");
-      const inputA = document.getElementById("inputA");
-
-      const sortDirection = document.getElementById("sortDirection");
-      const sortBtn = document.getElementById("sortBtn");
-      const sortedBtn = document.getElementById("sortedBtn");
-
-      const speedSlider = document.getElementById("speedSlider");
-      const speedLabel = document.getElementById("speedLabel");
-
-      const playPauseBtn = document.getElementById("playPauseBtn");
-      const stopBtn = document.getElementById("stopBtn");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-
-      const statusText = document.getElementById("statusText");
-      const passText = document.getElementById("passText");
-      const keyText = document.getElementById("keyText");
-      const compareText = document.getElementById("compareText");
-      const actionText = document.getElementById("actionText");
-      const progressPercent = document.getElementById("progressPercent");
-      const progressBar = document.getElementById("progressBar");
-
-      const width = ctx.canvas.getBoundingClientRect().width;
-      const height = ctx.canvas.getBoundingClientRect().height;
-
-      let liftAmounts = {};
-      let horizontalShifts = {};
-      let keyLift = 0;
-      let keyShift = 0;
-      let keyBaseX = 0;
-      let keyValue = null;
-      let initialKeyPos = -1;
-
-      let liftTarget = 0;
-      const liftMargin = 50;
-      const animationDuration = 300;
-      let pauseDuration = 200;
-
-      const basePause = 200;
-
-      // generate 5 data random awal
-      let data = [];
-      for (let i = 0; i < 5; i++) {
-        data.push(Math.floor(Math.random() * 50));
-      }
-      drawBars(ctx, data);
-
-      // slider kecepatan sorting
-      speedSlider.addEventListener("input", function (e) {
-        const val = parseFloat(e.target.value);
-        speedLabel.textContent = val.toFixed(1);
-        pauseDuration = Math.round(basePause / val);
-      });
-
-      // tombol input nilai N
-      inputN.addEventListener("input", function (e) {
-        if (isSorting) {
-          return;
-        }
-        var n = parseInt(e.target.value);
-        n = Math.min(n, 50);
-        if (n > 0) {
-          data = [];
-          for (var i = 0; i < n; i++) {
-            data.push(Math.floor(Math.random() * 50));
-          }
-        } else {
-          data = [];
-        }
-
-        drawBars(ctx, data);
-      });
-
-      // tombol input nilai manual
-      inputA.addEventListener("input", function (e) {
-        if (isSorting) {
-          return;
-        }
-        var teks = e.target.value;
-        var nilai = teks.split(",");
-        data = [];
-        for (var i = 0; i < nilai.length; i++) {
-          var angka = parseFloat(nilai[i]);
-          if (!isNaN(angka)) {
-            data.push(angka);
-          }
-        }
-
-        drawBars(ctx, data);
-      });
-
-      // tombol duplikat
-      btnManyDuplicate.addEventListener("click", function () {
-        if (isSorting) {
-          return;
-        }
-        var n = parseInt(inputN.value);
-        var range = Math.ceil(n / 2);
-        if (range < 1) {
-          range = 1;
-        }
+      var n = parseInt(e.target.value);
+      n = Math.min(n, 50);
+      if (n > 0) {
         data = [];
         for (var i = 0; i < n; i++) {
-          data.push(Math.floor(Math.random() * range));
+          data.push(Math.floor(Math.random() * 50));
         }
+      } else {
+        data = [];
+      }
+
+      drawBars(ctx, data);
+    });
+
+    // tombol input nilai manual
+    inputA.addEventListener("input", function (e) {
+      if (isSorting) {
+        return;
+      }
+      var teks = e.target.value;
+      var nilai = teks.split(",");
+      data = [];
+      for (var i = 0; i < nilai.length; i++) {
+        var angka = parseFloat(nilai[i]);
+        if (!isNaN(angka)) {
+          data.push(angka);
+        }
+      }
+
+      drawBars(ctx, data);
+    });
+
+    // tombol duplikat
+    btnManyDuplicate.addEventListener("click", function () {
+      if (isSorting) {
+        return;
+      }
+      var n = parseInt(inputN.value);
+      var range = Math.ceil(n / 2);
+      if (range < 1) {
+        range = 1;
+      }
+      data = [];
+      for (var i = 0; i < n; i++) {
+        data.push(Math.floor(Math.random() * range));
+      }
+      drawBars(ctx, data);
+    });
+
+    // tombol unik
+    btnUnique.addEventListener("click", function () {
+      if (isSorting) {
+        return;
+      }
+      var n = parseInt(inputN.value);
+      var maxValue = n * 2;
+      var unik = [];
+      while (unik.length < n) {
+        var acak = Math.floor(Math.random() * maxValue) + 1;
+        if (unik.indexOf(acak) === -1) {
+          unik.push(acak);
+        }
+      }
+      data = unik;
+
+      drawBars(ctx, data);
+    });
+
+    let isSorting = false;
+    let isPaused = false;
+    let p = 1;
+    let i = 0;
+    let tem;
+    let N = 0;
+    let currentDir = "asc";
+    let state = "chooseBar";
+
+    let arr_A = [];
+    let orangeIndices = new Set();
+    let currentCompare = -1;
+
+    let history = [];
+    let currentStep = -1;
+
+    // menyimpan history langkah sorting
+    function sortHistory() {
+      const sortStep = {
+        arr_A: [...arr_A],
+        orangeIndices: new Set([...orangeIndices]),
+        currentCompare,
+        keyValue,
+        keyLift,
+        keyShift,
+        keyBaseX,
+        state,
+        p,
+        i,
+      };
+      history.push(sortStep);
+      currentStep = history.length - 1; // update posisi langkah terkini
+    }
+
+    // update tampilan progress sorting
+    function updateProgressInfo() {
+      if (!isSorting) {
+        statusText.textContent = "Siap";
+        passText.textContent = "-";
+        keyText.textContent = "-";
+        compareText.textContent = "-";
+        actionText.textContent = "-";
+        progressPercent.textContent = "0%";
+        progressBar.style.width = "0%";
+        return;
+      }
+
+      statusText.textContent = isPaused ? "Dijeda" : "Berjalan";
+      passText.textContent = `${p} / ${N - 1}`;
+      keyText.textContent = keyValue !== null ? keyValue : "-";
+      compareText.textContent = currentCompare >= 0 ? arr_A[currentCompare] : "-";
+
+      if (state === "chooseBar") {
+        actionText.textContent = "Memilih key";
+      } else if (state === "compare") {
+        actionText.textContent = "Membandingkan";
+      } else if (state === "moveBar") {
+        actionText.textContent = "Menggeser bar";
+      } else if (state === "insert") {
+        actionText.textContent = "Menempatkan key";
+      }
+
+      const progress = N > 1 ? ((p - 1) / (N - 1)) * 100 : 0;
+      progressPercent.textContent = `${Math.round(progress)}%`;
+      progressBar.style.width = `${progress}%`;
+    }
+
+    // menjalankan sort berdasarkan jenis ketika dijalankan
+    function applySortFromDropdown(type) {
+      if (!data || data.length === 0 || isSorting) {
+        return;
+      }
+
+      currentDir = sortDirection.value;
+
+      if (type === "sorted") {
+        let arr = [...data];
+        insertionSort(arr, currentDir);
+        data = arr;
         drawBars(ctx, data);
-      });
-
-      // tombol unik
-      btnUnique.addEventListener("click", function () {
-        if (isSorting) {
-          return;
-        }
-        var n = parseInt(inputN.value);
-        var maxValue = n * 2;
-        var unik = [];
-        while (unik.length < n) {
-          var acak = Math.floor(Math.random() * maxValue) + 1;
-          if (unik.indexOf(acak) === -1) {
-            unik.push(acak);
-          }
-        }
-        data = unik;
-
-        drawBars(ctx, data);
-      });
-
-      let isSorting = false;
-      let isPaused = false;
-      let p = 1;
-      let i = 0;
-      let tem;
-      let N = 0;
-      let currentDir = "asc";
-      let state = "chooseBar";
-
-      let arr_A = [];
-      let orangeIndices = new Set();
-      let currentCompare = -1;
-
-      let history = [];
-      let currentStep = -1;
-
-      // menyimpan history langkah sorting
-      function sortHistory() {
-        const sortStep = {
-          arr_A: [...arr_A],
-          orangeIndices: new Set([...orangeIndices]),
-          currentCompare,
-          keyValue,
-          keyLift,
-          keyShift,
-          keyBaseX,
-          state,
-          p,
-          i,
-        };
-        history.push(sortStep);
-        currentStep = history.length - 1; // update posisi langkah terkini
-      }
-
-      // update tampilan progress sorting
-      function updateProgressInfo() {
-        if (!isSorting) {
-          statusText.textContent = "Siap";
-          passText.textContent = "-";
-          keyText.textContent = "-";
-          compareText.textContent = "-";
-          actionText.textContent = "-";
-          progressPercent.textContent = "0%";
-          progressBar.style.width = "0%";
-          return;
-        }
-
-        statusText.textContent = isPaused ? "Dijeda" : "Berjalan";
-        passText.textContent = `${p} / ${N - 1}`;
-        keyText.textContent = keyValue !== null ? keyValue : "-";
-        compareText.textContent = currentCompare >= 0 ? arr_A[currentCompare] : "-";
-
-        if (state === "chooseBar") {
-          actionText.textContent = "Memilih key";
-        } else if (state === "compare") {
-          actionText.textContent = "Membandingkan";
-        } else if (state === "moveBar") {
-          actionText.textContent = "Menggeser bar";
-        } else if (state === "insert") {
-          actionText.textContent = "Menempatkan key";
-        }
-
-        const progress = N > 1 ? ((p - 1) / (N - 1)) * 100 : 0;
-        progressPercent.textContent = `${Math.round(progress)}%`;
-        progressBar.style.width = `${progress}%`;
-      }
-
-      // menjalankan sort berdasarkan jenis ketika dijalankan
-      function applySortFromDropdown(type) {
-        if (!data || data.length === 0 || isSorting) {
-          return;
-        }
-
-        currentDir = sortDirection.value;
-
-        if (type === "sorted") {
-          let arr = [...data];
-          insertionSort(arr, currentDir);
-          data = arr;
-          drawBars(ctx, data);
-        } else {
-          isSorting = true;
-          isPaused = false;
-          sortBtn.disabled = true;
-          sortedBtn.disabled = true;
-          playPauseBtn.disabled = false;
-          stopBtn.disabled = false;
-          prevBtn.disabled = false;
-          nextBtn.disabled = false;
-          playPauseBtn.textContent = "⏸ Pause";
-
-          arr_A = [...data];
-          N = arr_A.length;
-          p = 1;
-          state = "chooseBar";
-
-          orangeIndices = new Set([0]);
-          currentCompare = -1;
-          liftAmounts = {};
-          horizontalShifts = {};
-          keyValue = null;
-
-          updateProgressInfo();
-          drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
-
-          insertionSortStep();
-        }
-      }
-
-      // tombol sorted
-      sortedBtn.addEventListener("click", function () {
-        applySortFromDropdown("sorted");
-      });
-      // tombol sort
-      sortBtn.addEventListener("click", function () {
-        applySortFromDropdown("sort");
-      });
-
-      // tombol pause
-      playPauseBtn.addEventListener("click", function () {
-        if (!isSorting) {
-          return;
-        }
-
-        isPaused = !isPaused;
-        playPauseBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
-
-        if (!isPaused) {
-          updateProgressInfo();
-          insertionSortStep();
-        } else {
-          updateProgressInfo();
-        }
-      });
-
-      // tombol stop
-      stopBtn.addEventListener("click", function () {
-        if (!isSorting) {
-          return;
-        }
-
-        isSorting = false;
+      } else {
+        isSorting = true;
         isPaused = false;
-        sortBtn.disabled = false;
-        sortedBtn.disabled = false;
-        playPauseBtn.disabled = true;
-        stopBtn.disabled = true;
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
-        playPauseBtn.textContent = "▶ Play";
+        sortBtn.disabled = true;
+        sortedBtn.disabled = true;
+        playPauseBtn.disabled = false;
+        stopBtn.disabled = false;
+        prevBtn.disabled = false;
+        nextBtn.disabled = false;
+        playPauseBtn.textContent = "⏸ Pause";
 
+        arr_A = [...data];
+        N = arr_A.length;
+        p = 1;
+        state = "chooseBar";
+
+        orangeIndices = new Set([0]);
+        currentCompare = -1;
         liftAmounts = {};
         horizontalShifts = {};
         keyValue = null;
-        orangeIndices = new Set();
-        currentCompare = -1;
 
-        drawBars(ctx, data);
         updateProgressInfo();
-      });
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
 
-      // tombol prev
-      prevBtn.addEventListener("click", function () {
-        if (!isSorting || !isPaused) {
-          return;
-        }
-        if (currentStep > 0) {
-          currentStep--;
-          const sortStep = history[currentStep];
-          arr_A = [...sortStep.arr_A];
-          orangeIndices = new Set([...sortStep.orangeIndices]);
-          currentCompare = sortStep.currentCompare;
-          keyValue = sortStep.keyValue;
-          keyLift = sortStep.keyLift;
-          keyShift = sortStep.keyShift;
-          keyBaseX = sortStep.keyBaseX;
-          state = sortStep.state;
-          p = sortStep.p;
-          i = sortStep.i;
+        insertionSortStep();
+      }
+    }
 
-          drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+    // tombol sorted
+    sortedBtn.addEventListener("click", function () {
+      applySortFromDropdown("sorted");
+    });
+    // tombol sort
+    sortBtn.addEventListener("click", function () {
+      applySortFromDropdown("sort");
+    });
+
+    // tombol pause
+    playPauseBtn.addEventListener("click", function () {
+      if (!isSorting) {
+        return;
+      }
+
+      isPaused = !isPaused;
+      playPauseBtn.textContent = isPaused ? "▶ Play" : "⏸ Pause";
+
+      if (!isPaused) {
+        updateProgressInfo();
+        insertionSortStep();
+      } else {
+        updateProgressInfo();
+      }
+    });
+
+    // tombol stop
+    stopBtn.addEventListener("click", function () {
+      if (!isSorting) {
+        return;
+      }
+
+      isSorting = false;
+      isPaused = false;
+      sortBtn.disabled = false;
+      sortedBtn.disabled = false;
+      playPauseBtn.disabled = true;
+      stopBtn.disabled = true;
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      playPauseBtn.textContent = "▶ Play";
+
+      liftAmounts = {};
+      horizontalShifts = {};
+      keyValue = null;
+      orangeIndices = new Set();
+      currentCompare = -1;
+
+      drawBars(ctx, data);
+      updateProgressInfo();
+    });
+
+    // tombol prev
+    prevBtn.addEventListener("click", function () {
+      if (!isSorting || !isPaused) {
+        return;
+      }
+      if (currentStep > 0) {
+        currentStep--;
+        const sortStep = history[currentStep];
+        arr_A = [...sortStep.arr_A];
+        orangeIndices = new Set([...sortStep.orangeIndices]);
+        currentCompare = sortStep.currentCompare;
+        keyValue = sortStep.keyValue;
+        keyLift = sortStep.keyLift;
+        keyShift = sortStep.keyShift;
+        keyBaseX = sortStep.keyBaseX;
+        state = sortStep.state;
+        p = sortStep.p;
+        i = sortStep.i;
+
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+        updateProgressInfo();
+      }
+    });
+
+    // tombol next
+    nextBtn.addEventListener("click", function () {
+      if (!isSorting || !isPaused) {
+        return;
+      }
+
+      if (currentStep < history.length - 1) {
+        currentStep++;
+        const sortStep = history[currentStep];
+        arr_A = [...sortStep.arr_A];
+        orangeIndices = new Set([...sortStep.orangeIndices]);
+        currentCompare = sortStep.currentCompare;
+        keyValue = sortStep.keyValue;
+        keyLift = sortStep.keyLift;
+        keyShift = sortStep.keyShift;
+        keyBaseX = sortStep.keyBaseX;
+        state = sortStep.state;
+        p = sortStep.p;
+        i = sortStep.i;
+
+        drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
+        updateProgressInfo();
+      } else {
+        isPaused = false;
+        insertionSortStep();
+        setTimeout(() => {
+          isPaused = true;
+          playPauseBtn.textContent = "▶ Play";
           updateProgressInfo();
-        }
-      });
+        }, pauseDuration + animationDuration + 50);
+      }
+    });
+  </script>
+</body>
 
-      // tombol next
-      nextBtn.addEventListener("click", function () {
-        if (!isSorting || !isPaused) {
-          return;
-        }
-
-        if (currentStep < history.length - 1) {
-          currentStep++;
-          const sortStep = history[currentStep];
-          arr_A = [...sortStep.arr_A];
-          orangeIndices = new Set([...sortStep.orangeIndices]);
-          currentCompare = sortStep.currentCompare;
-          keyValue = sortStep.keyValue;
-          keyLift = sortStep.keyLift;
-          keyShift = sortStep.keyShift;
-          keyBaseX = sortStep.keyBaseX;
-          state = sortStep.state;
-          p = sortStep.p;
-          i = sortStep.i;
-
-          drawBars(ctx, arr_A, orangeIndices, -1, currentCompare);
-          updateProgressInfo();
-        } else {
-          isPaused = false;
-          insertionSortStep(); 
-          setTimeout(() => {
-            isPaused = true;
-            playPauseBtn.textContent = "▶ Play";
-            updateProgressInfo();
-          }, pauseDuration + animationDuration + 50);
-        }
-      });
-    </script>
-  </body>
 </html>
