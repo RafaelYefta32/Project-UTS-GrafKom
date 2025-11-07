@@ -107,7 +107,8 @@ function drawBars(ctx, data, orangeIndices = new Set(), currentKey = -1, current
   const titik_putar = { x: width / 2, y: offsetY };
 
   const startX = (width - totalWidth) / 2; // posisi awal bar (tengah canvas)
-  const maxValue = Math.max(...data.filter((v) => v !== null), keyValue !== null ? keyValue : 0) > 0 ? Math.max(...data.filter((v) => v !== null), keyValue !== null ? keyValue : 0) : 1;
+  const values = [...data.filter(v => v !== null), keyValue ?? 0];
+  const maxValue = Math.max(...values, 0) || 1;
   const scaleHeight = (height * 0.4) / maxValue; // menskalakan tinggi bar
 
   let barNumber = [];
@@ -413,7 +414,7 @@ function insertionSortStep() {
 
     currentCompare = -1;
 
-    const maxValue = Math.max(...arr_A.filter((v) => v !== null), keyValue) > 0 ? Math.max(...arr_A.filter((v) => v !== null), keyValue) : 1;
+    const maxValue = Math.max(...arr_A.filter(v => v !== null), keyValue ?? 0) || 1;
     const scaleHeight = (height * 0.4) / maxValue;
     const maxBarHeight = maxValue * scaleHeight;
     liftTarget = -(maxBarHeight + liftMargin);
